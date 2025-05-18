@@ -13,7 +13,10 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = await getProductBySlug(params.slug);
+  console.log({params});
+  const paramdata = await params;
+  const product = await getProductBySlug(paramdata.slug);
+
   
   if (!product) {
     return {
@@ -24,23 +27,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { fields } = product as unknown as Product;
   
   return {
-    title: fields.metaTitle || fields.name,
+    title: fields.metaTitle || fields.title,
     description: fields.metaDescription || (typeof fields.description === 'string' ? fields.description.substring(0, 160) : 'View product details'),
     openGraph: {
       images: [
         {
-          url: `https:${fields.mainImage.fields.file.url}`,
-          width: fields.mainImage.fields.file.details.image.width,
-          height: fields.mainImage.fields.file.details.image.height,
-          alt: fields.mainImage.fields.title,
+          url: `https:${fields.images[0].fields.file.url}`,
+          width: fields.images[0].fields.file.details.image.width,
+          height: fields.images[0].fields.file.details.image.height,
+          alt: fields.images[0].fields.title,
         },
       ],
     },
   };
 }
 
-export default async function ProductPage({ params }: Props) {
-  const product = await getProductBySlug(params.slug);
+export default async function ProductPage({ params }: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const product = await getProductBySlug(slug);
   
   if (!product) {
     notFound();
@@ -56,13 +62,13 @@ export default async function ProductPage({ params }: Props) {
         </div>
         
         <div>
-          <h1 className="text-3xl font-bold">{fields.name}</h1>
+          <h1 className="text-3xl font-bold">{fields.title}</h1>
           
           <div className="mt-4 flex items-center">
             <span className="text-2xl font-semibold">${fields.price.toFixed(2)}</span>
-            {fields.compareAtPrice && (
+            {fields.discountedPrice && (
               <span className="ml-3 text-lg text-gray-500 line-through">
-                ${fields.compareAtPrice.toFixed(2)}
+                ${fields.discountedPrice.toFixed(2)}
               </span>
             )}
           </div>
@@ -72,10 +78,10 @@ export default async function ProductPage({ params }: Props) {
           </div>
           
           <div className="mt-8">
-            <AddToCartButton product={product} disabled={!fields.inStock} />
+            <AddToCartButton product={ product } disabled={fields.stockQty === 0} />
           </div>
           
-          {!fields.inStock && (
+          {fields.stockQty === 0 && (
             <p className="mt-4 text-red-600">Currently out of stock</p>
           )}
           
@@ -83,34 +89,26 @@ export default async function ProductPage({ params }: Props) {
             <h3 className="text-lg font-semibold">SKU: {fields.sku}</h3>
             <div className="mt-2">
               <span className="font-medium">Categories: </span>
-              {fields.categories.map((category, index) => (
+              {/* {fields.categories.map((category, index) => (
                 <span key={category.sys.id}>
-                  {category.fields.name}
+                  {category.fields.title}
                   {index < fields.categories.length - 1 ? ', ' : ''}
                 </span>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>
       </div>
+
       
-      {/* Features section - if available */}
-      {fields.features && fields.features.length > 0 && (
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-6">Product Features</h2>
-          <div className="prose max-w-none">
-            {/* Render features here */}
-          </div>
-        </div>
-      )}
-      
-      <div className="mt-20">
+      {/* <div className="mt-20">
         <h2 className="text-2xl font-bold mb-6">Related Products</h2>
         <RelatedProducts 
-          categoryIds={fields.categories.map(cat => cat.sys.id)} 
+          // categoryIds={fields.categories.map(cat => cat.sys.id)} 
+          categoryIds={[]}
           currentProductId={product.sys.id} 
         />
-      </div>
+      </div> */}
     </div>
   );
 }

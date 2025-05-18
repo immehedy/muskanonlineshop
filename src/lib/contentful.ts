@@ -1,3 +1,4 @@
+
 import { createClient } from 'contentful';
 
 const client = createClient({
@@ -14,7 +15,7 @@ const previewClient = createClient({
 export const getClient = (preview: boolean = false) => 
   preview ? previewClient : client;
 
-  // Fetch all products with pagination support
+// Fetch hero content
 export async function getHero(preview = false) {
   const client = getClient(preview);
   
@@ -56,6 +57,28 @@ export async function getCategories(preview = false) {
   
   const response = await client.getEntries({
     content_type: 'category',
+  });
+  
+  return response.items;
+}
+
+// Fetch related products based on categories
+export async function getRelatedProducts(
+  categoryIds: string[],
+  currentProductId: string,
+  limit = 4,
+  preview = false
+) {
+  const client = getClient(preview);
+  
+  // Query products that share at least one category with the current product
+  // but exclude the current product itself
+  const response = await client.getEntries({
+    content_type: 'product',
+    'fields.categories.sys.id[in]': categoryIds.join(','),
+    'sys.id[ne]': currentProductId,
+    limit,
+    include: 2,
   });
   
   return response.items;

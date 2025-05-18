@@ -31,8 +31,16 @@ export interface ContentfulImage {
   
   export interface Product {
     sys: {
+      space: object;
       id: string;
+      type: string;
       createdAt: string;
+      updatedAt: string;
+      environment: object;
+      publishedVersion: number;
+      revision: number;
+      contentType: object;
+      locale: string;
     };
     fields: {
       title: string;               // Changed from "name" to "title" (Entry title field)
@@ -43,7 +51,7 @@ export interface ContentfulImage {
       discountedPrice?: number;    // Changed from "compareAtPrice" to "discountedPrice"
       sku: string;
       stockQty: number;            // New field (Integer)
-      category: Category[];        // References, many
+      categories: Category[];        // References, many
       rating?: number;             // New field (Integer)
       metaTitle?: string;
       metaDescription?: string;

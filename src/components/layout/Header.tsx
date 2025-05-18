@@ -1,12 +1,16 @@
+'use client'
+
 import React from 'react';
 import { ShoppingCart, Heart, Phone, User, ChevronDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useCartStore } from '@/stores/useCartStore';
+import { useFavoritesStore } from '@/stores/useFavoriteStore';
 
 const Header = () => {
-  const cartItemCount = 2;
-  const favoriteItemCount = 3;
+  const favoriteItemCount = useFavoritesStore(state => state.getTotalFavorites());
+  const cartItemCount = useCartStore(state => state.getTotalItems());
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg shadow-sm">
