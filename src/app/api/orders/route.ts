@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OrderDatabase } from '@/lib/database';
-import { CartItem, ShippingAddress, PaymentMethod } from '@/types/checkout';
+import { CartItem, PaymentMethod } from '@/types/checkout';
+import { OrderDatabase } from '@/lib/order';
 
 export async function POST(request: NextRequest) {
   try {
