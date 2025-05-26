@@ -71,7 +71,7 @@ export default function Dashboard() {
             <div className="text-2xl">💰</div>
             <div className="ml-4">
               <p className="text-gray-600">Total Revenue</p>
-              <p className="text-2xl font-bold">${stats.totalRevenue}</p>
+              <p className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</p>
             </div>
           </div>
         </div>
