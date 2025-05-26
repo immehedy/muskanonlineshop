@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { ShoppingCart, Heart, Phone, User, ChevronDown } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCartStore } from '@/stores/useCartStore';
 import { useFavoritesStore } from '@/stores/useFavoriteStore';
+import { Badge } from '../ui/Badge';
 
 const Header = () => {
   const favoriteItemCount = useFavoritesStore(state => state.getTotalFavorites());

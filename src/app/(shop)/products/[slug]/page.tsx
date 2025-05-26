@@ -8,12 +8,11 @@ import RelatedProducts from '@/components/products/RelatedProducts';
 import { getProductBySlug } from '@/lib/contentful';
 import { Product } from '@/types/contentful';
 
-type Props = {
-  params: { slug: string };
-};
+interface Props {
+  params: Promise<{ slug: string }>;
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  console.log({params});
   const paramdata = await params;
   const product = await getProductBySlug(paramdata.slug);
 
