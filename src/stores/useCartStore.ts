@@ -18,8 +18,15 @@ type CartState = {
   getTotalPrice: () => number;
 };
 
+// Helper to safely parse sessionStorage cart data
+const getInitialCartItems = (): CartItem[] => {
+  if (typeof window === 'undefined') return [];
+  const stored = sessionStorage.getItem('cart');
+  return stored ? JSON.parse(stored) : [];
+};
+
 export const useCartStore = create<CartState>((set, get) => ({
-  items: [],
+  items: getInitialCartItems(), // Initialize with sessionStorage data
 
   addToCart: (product, quantity) => {
     const { items } = get();
@@ -43,7 +50,6 @@ export const useCartStore = create<CartState>((set, get) => ({
         ],
       });
     }
-
     sessionStorage.setItem('cart', JSON.stringify(get().items));
   },
 
@@ -66,8 +72,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     sessionStorage.removeItem('cart');
   },
 
-  getTotalItems: () =>
-    get().items.reduce((total, item) => total + item.quantity, 0),
+  getTotalItems: () => get().items.length,
 
   getTotalPrice: () =>
     get().items.reduce((total, item) => total + item.price * item.quantity, 0),

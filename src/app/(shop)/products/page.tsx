@@ -24,7 +24,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const skip = (page - 1) * limit;
 
   const productsData = await getProducts(limit, skip);
-  const categoriesData = await getCategories();
 
   const totalPages = Math.ceil(productsData.total / limit);
 
@@ -32,18 +31,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold mb-8">All Products</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="md:col-span-1">
-          {/* Category filters (not implemented yet) */}
-        </div>
-
-        <div className="md:col-span-3">
+      <div>
           <ProductGrid products={productsData.items} />
 
           <div className="mt-12">
             <Pagination currentPage={page} totalPages={totalPages} />
           </div>
-        </div>
       </div>
     </div>
   );

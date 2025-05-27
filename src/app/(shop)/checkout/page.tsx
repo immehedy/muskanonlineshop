@@ -405,16 +405,16 @@ export default function CheckoutPage() {
                       <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                       {hasDiscount && (
                         <div className="text-sm">
-                          <span className="line-through text-gray-500">${originalPrice}</span>
-                          <span className="text-green-600 ml-2">${currentPrice}</span>
+                          <span className="line-through text-gray-500">৳{originalPrice}</span>
+                          <span className="text-green-600 ml-2">৳{currentPrice}</span>
                         </div>
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold">${(currentPrice * item.quantity).toFixed(2)}</p>
+                      <p className="font-semibold">৳{(currentPrice * item.quantity).toFixed(2)}</p>
                       {hasDiscount && (
                         <p className="text-xs text-green-600">
-                          Save ${((originalPrice - currentPrice) * item.quantity).toFixed(2)}
+                          Save ৳{((originalPrice - currentPrice) * item.quantity).toFixed(2)}
                         </p>
                       )}
                     </div>
@@ -427,22 +427,22 @@ export default function CheckoutPage() {
             <div className="border-t pt-4 space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>৳{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping:</span>
-                <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
+                <span>{shipping === 0 ? 'FREE' : `৳${shipping.toFixed(2)}`}</span>
               </div>
               {shipping === 0 && (
                 <p className="text-xs text-green-600">Free shipping on orders over $50!</p>
               )}
               <div className="flex justify-between">
                 <span>Tax:</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>৳{tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold text-lg border-t pt-2">
                 <span>Total:</span>
-                <span>${total.toFixed(2)}</span>
+                <span>৳{total.toFixed(2)}</span>
               </div>
             </div>
           </div>
