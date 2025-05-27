@@ -26,7 +26,7 @@ export interface CartItem {
   }
   
   export interface PaymentMethod {
-    type: 'card' | 'paypal' | 'stripe';
+    type: 'card' | 'paypal' | 'stripe' | 'cod' | 'bkash' | 'nagad';
     cardNumber?: string;
     expiryDate?: string;
     cvv?: string;

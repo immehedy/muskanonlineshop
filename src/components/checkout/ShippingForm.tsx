@@ -95,19 +95,6 @@ export default function ShippingForm({ shippingAddress, setShippingAddress, onNe
               />
             </div>
   
-            <div>
-              <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
-                State *
-              </label>
-              <input
-                id="state"
-                type="text"
-                value={shippingAddress.state}
-                onChange={(e) => handleChange('state', e.target.value)}
-                className="w-full border p-3 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-            </div>
   
             <div>
               <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
@@ -135,9 +122,6 @@ export default function ShippingForm({ shippingAddress, setShippingAddress, onNe
               className="w-full border p-3 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             >
-              <option value="">Select Country</option>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
               <option value="BD">Bangladesh</option>
             </select>
           </div>

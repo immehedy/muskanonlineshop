@@ -55,7 +55,7 @@ export default function CartPage() {
                         <span className="text-sm">Remove</span>
                       </button>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">৳{item.price.toFixed(2)} each</p>
+                    <p className="text-sm text-gray-600 mt-1">৳{item.product?.fields?.discountedPrice.toFixed(2) || item.price.toFixed(2)} each</p>
 
                     <div className="mt-4 flex flex-col sm:flex-row items-center gap-4">
                       <div className="flex items-center gap-2">
@@ -72,7 +72,7 @@ export default function CartPage() {
                         />
                       </div>
                       <p className="text-sm font-semibold text-gray-700">
-                        Subtotal: ৳{(item.quantity * item.price).toFixed(2)}
+                        Subtotal: ৳{(item.quantity * (item.product?.fields?.discountedPrice ?? item.price)).toFixed(2)}
                       </p>
                     </div>
                   </div>

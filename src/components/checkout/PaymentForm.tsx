@@ -33,7 +33,7 @@ export default function PaymentForm({
               type="radio"
               name="paymentType"
               value="cod"
-              checked={paymentMethod.type === 'cod'}
+              checked={true}
               onChange={() => setPaymentMethod({ ...paymentMethod, type: 'cod' })}
             />
             <span>Cash on Delivery</span>

@@ -12,15 +12,12 @@ export class OrderDatabase {
       
         const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
         const shipping = this.calculateShipping(items, shippingAddress);
-        const tax = this.calculateTax(subtotal, shippingAddress);
+        const tax = 0;
         const total = subtotal + shipping + tax;
       
         // Sanitize payment method for security
         const sanitizedPaymentMethod = {
-          ...paymentMethod,
-          cardNumber: undefined, // Never store full card number
-          cvv: undefined, // Never store CVV
-          last4: paymentMethod.cardNumber?.slice(-4)
+          type: paymentMethod?.type
         };
       
         // Generate order number
@@ -51,7 +48,6 @@ export class OrderDatabase {
             phone: shippingAddress.phone,
             address: shippingAddress.address,
             city: shippingAddress.city,
-            state: shippingAddress.state,
             zipCode: shippingAddress.zipCode,
             country: shippingAddress.country
           },
@@ -64,16 +60,6 @@ export class OrderDatabase {
           paymentStatus: 'pending',
           orderDate: new Date(),
           estimatedDelivery: new Date(Date.now() + (7 * 24 * 60 * 60 * 1000)) // 7 days from now
-        });
-      
-        console.log('Creating order:', {
-          orderNumber,
-          itemCount: items.length,
-          subtotal,
-          shipping,
-          tax,
-          total,
-          customerEmail: shippingAddress.email
         });
       
         return await order.save();
@@ -113,10 +99,14 @@ export class OrderDatabase {
   }
 
   static calculateShipping(items: CartItem[], address: ShippingAddress): number {
-    const baseShipping = 5.99;
-    const itemCount = items.reduce((count, item) => count + item.quantity, 0);
-    return itemCount > 5 ? baseShipping + 2.99 : baseShipping;
+    const city = address.city?.trim().toLowerCase();
+    if (city === 'dhaka') {
+      return 60;
+    } else {
+      return 120;
+    }
   }
+  
 
   static calculateTax(subtotal: number, address: ShippingAddress): number {
     const taxRates: { [key: string]: number } = {
@@ -127,7 +117,7 @@ export class OrderDatabase {
       'WA': 0.065,  // Washington
     };
     
-    const taxRate = taxRates[address.state] || 0.06; // Default 6%
+    const taxRate = taxRates[address.city] || 0.06; // Default 6%
     return subtotal * taxRate;
   }
 

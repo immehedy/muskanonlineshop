@@ -70,8 +70,8 @@ export default function CheckoutPage() {
     return total + (itemPrice * item.quantity);
   }, 0);
 
-  const shipping = subtotal > 50 ? 0 : 5.99;
-  const tax = subtotal * 0.08;
+  const shipping = shippingAddress?.city.includes('Dhaka') ? 60 : 120;
+  const tax = 0;
   const total = subtotal + shipping + tax;
 
   const handlePlaceOrder = async () => {
@@ -104,7 +104,7 @@ export default function CheckoutPage() {
       const result = await response.json();
       if (result.success) {
         CartManager.clearCart();
-        router.push(`/`);
+        window.location.reload();
       } else {
         alert('Order failed: ' + result.error);
       }
@@ -125,16 +125,12 @@ export default function CheckoutPage() {
         shippingAddress.phone &&
         shippingAddress.address &&
         shippingAddress.city &&
-        shippingAddress.state &&
         shippingAddress.zipCode
       );
     }
     if (stepNum === 2) {
       return (
-        paymentMethod.cardholderName &&
-        paymentMethod.cardNumber &&
-        paymentMethod.expiryDate &&
-        paymentMethod.cvv
+        paymentMethod.type
       );
     }
     return true;
