@@ -156,8 +156,8 @@ export default function OrdersPage() {
                       <span className="text-gray-600 ml-2">(Qty: {item.quantity})</span>
                     </div>
                     <div className="text-right">
-                      <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
-                      <span className="text-sm text-gray-500 block">${item.price} each</span>
+                      <span className="font-medium">৳{(item.price * item.quantity).toFixed(2)}</span>
+                      <span className="text-sm text-gray-500 block">৳{item.price} each</span>
                     </div>
                   </div>
                 ))}
@@ -199,19 +199,19 @@ export default function OrdersPage() {
               <div className="text-sm space-y-1">
                 <div className="flex justify-between">
                   <span>Subtotal:</span>
-                  <span>${order.subtotal.toFixed(2)}</span>
+                  <span>৳{order.subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping:</span>
-                  <span>${order.shipping.toFixed(2)}</span>
+                  <span>৳{order.shipping.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Tax:</span>
-                  <span>${order.tax.toFixed(2)}</span>
+                  <span>৳{order.tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-base pt-2 border-t">
                   <span>Total:</span>
-                  <span>${order.total.toFixed(2)}</span>
+                  <span>৳{order.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>

@@ -6,6 +6,8 @@ export async function POST(request: NextRequest) {
   try {
     const { items, shippingAddress, paymentMethod } = await request.json();
 
+    console.log("payment", paymentMethod)
+
     // Validate required fields
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: 'Cart items are required' }, { status: 400 });
@@ -18,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate shipping address
-    const requiredAddressFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode'];
+    const requiredAddressFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'zipCode'];
     for (const field of requiredAddressFields) {
       if (!shippingAddress[field]) {
         return NextResponse.json({ 
@@ -27,22 +29,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Process payment (mock implementation - replace with real payment processor)
-    const paymentResult = await processPayment(paymentMethod, items);
     
-    if (!paymentResult.success) {
-      return NextResponse.json({ 
-        error: 'Payment failed: ' + paymentResult.error 
-      }, { status: 400 });
-    }
 
     // Create order in database
     const order = await OrderDatabase.createOrder(items, shippingAddress, paymentMethod);
 
     // Update payment status
-    await OrderDatabase.updatePaymentStatus(order.id.toString(), 'paid');
+    // await OrderDatabase.updatePaymentStatus(order.id.toString(), 'paid');
 
-    // In a real app, you would also:
+    // In a real app, you would also
     // 1. Send confirmation email
     // 2. Update inventory in Contentful
     // 3. Trigger fulfillment process
@@ -102,18 +97,4 @@ export async function GET(request: NextRequest) {
       error: 'Internal server error' 
     }, { status: 500 });
   }
-}
-
-// Mock payment processing function
-async function processPayment(paymentMethod: PaymentMethod, items: CartItem[]) {
-  return new Promise<{ success: boolean; error?: string }>((resolve) => {
-    setTimeout(() => {
-      // Simulate payment processing
-      if (paymentMethod.type === 'card' && paymentMethod.cardNumber?.startsWith('4000')) {
-        resolve({ success: false, error: 'Card declined' });
-      } else {
-        resolve({ success: true });
-      }
-    }, 1000);
-  });
 }

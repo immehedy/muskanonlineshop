@@ -16,7 +16,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg shadow-sm">
         {/* Top bar with contact */}
         <div className="md:hidden container mx-auto p-4 text-sm text-gray-700 flex flex-col md:flex-row items-center justify-between">
-          <span className="w-full text-center font-semibold">Need Help? Call us: <strong className="text-[#247a95]">+880 1234-567890</strong></span>
+          <span className="w-full text-center font-semibold">Need Help? Call us: <strong className="text-[#247a95]">01799804899</strong></span>
         </div>
       <div className="container mx-auto px-4">
         <div className="flex flex-row sm:items-center justify-between gap-y-2 h-auto sm:h-20">
@@ -24,7 +24,7 @@ const Header = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.png"
+              src="/muskan-logo.png"
               alt="Muskan Online Shop Logo"
               width={120}
               height={50}
@@ -38,11 +38,11 @@ const Header = () => {
           {/* Action Icons */}
           <div className="flex items-center space-x-4">
             {/* Contact Number */}
-          <div className="hidden md:flex items-center space-x-2 text-sm sm:text-base text-[#247a95]">
+          <div className="hidden md:flex items-center space-x-2 text-sm sm:text-base">
             <Phone className="w-7 h-7 text-[#247a95]" />
             <div className="flex flex-col sm:space-x-2">
-              <span className="text-xs sm:text-sm text-sky-400 font-semibold uppercase opacity-50">Call Us</span>
-              <span className="font-bold text-[#247a95] text-base sm:text-lg">+88 01799804899</span>
+              <span className="text-xs sm:text-sm font-semibold uppercase opacity-50">Call Us</span>
+              <span className="font-bold text-[#247a95] text-base sm:text-lg">01799804899</span>
             </div>
           </div>
 

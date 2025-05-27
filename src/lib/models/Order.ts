@@ -23,14 +23,13 @@ const ShippingAddressSchema = new Schema({
   phone: { type: String, required: true },
   address: { type: String, required: true },
   city: { type: String, required: true },
-  state: { type: String, required: true },
   zipCode: { type: String, required: true },
-  country: { type: String, required: true, default: 'US' }
+  country: { type: String, required: true, default: 'BD' }
 });
 
 // Payment Method Schema
 const PaymentMethodSchema = new Schema({
-  type: { type: String, enum: ['card', 'paypal', 'stripe'], required: true },
+  type: { type: String, enum: ['card', 'paypal', 'stripe', 'cod', 'bkash', 'nagad'], required: true },
   cardNumber: { type: String },
   expiryDate: { type: String },
   cvv: { type: String },

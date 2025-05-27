@@ -11,7 +11,7 @@ const Footer = () => {
           <div>
           <Link href="/" className="flex items-center mb-4">
             <Image
-              src="/logo.png"
+              src="/muskan-logo.png"
               alt="Muskan Online Shop Logo"
               width={120}
               height={50}
@@ -39,11 +39,6 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-muted-foreground hover:text-[#247a95] button-hover">
-                  About Us
-                </Link>
-              </li>
-              <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-[#247a95] button-hover">
                   Contact
                 </Link>
@@ -56,22 +51,22 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/faq" className="text-muted-foreground hover:text-[#247a95] button-hover">
+                <Link href="#" className="text-muted-foreground hover:text-[#247a95] button-hover">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/shipping" className="text-muted-foreground hover:text-[#247a95] button-hover">
+                <Link href="#" className="text-muted-foreground hover:text-[#247a95] button-hover">
                   Shipping Information
                 </Link>
               </li>
               <li>
-                <Link href="/returns" className="text-muted-foreground hover:text-[#247a95] button-hover">
+                <Link href="#" className="text-muted-foreground hover:text-[#247a95] button-hover">
                   Returns & Exchanges
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-[#247a95] button-hover">
+                <Link href="#" className="text-muted-foreground hover:text-[#247a95] button-hover">
                   Privacy Policy
                 </Link>
               </li>
@@ -85,7 +80,7 @@ const Footer = () => {
               <p>Block B South mandail, Zinzira</p>
               <p>Keranigonj Model Dhaka, Bangladesh</p>
               <p className="mt-2">Email: info@muskanonlineshop.com</p>
-              <p>Phone: +880 1799804899</p>
+              <p>Phone: 01799804899</p>
             </address>
           </div>
         </div>

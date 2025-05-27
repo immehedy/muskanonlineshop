@@ -84,7 +84,7 @@ export default function RelatedProducts({
           <h3 className="mt-3 font-medium group-hover:text-blue-600 transition-colors">
             {product.fields.name}
           </h3>
-          <p className="mt-1 text-gray-800 font-semibold">${product.fields.price.toFixed(2)}</p>
+          <p className="mt-1 text-gray-800 font-semibold">৳{product.fields.price.toFixed(2)}</p>
         </Link>
       ))}
     </div>
