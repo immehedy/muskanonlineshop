@@ -11,7 +11,7 @@ const Footer = () => {
           <div>
           <Link href="/" className="flex items-center mb-4">
             <Image
-              src="/logo.png"
+              src="/muskan-logo.png"
               alt="Muskan Online Shop Logo"
               width={120}
               height={50}
@@ -85,7 +85,7 @@ const Footer = () => {
               <p>Block B South mandail, Zinzira</p>
               <p>Keranigonj Model Dhaka, Bangladesh</p>
               <p className="mt-2">Email: info@muskanonlineshop.com</p>
-              <p>Phone: +880 1799804899</p>
+              <p>Phone: 01799804899</p>
             </address>
           </div>
         </div>
