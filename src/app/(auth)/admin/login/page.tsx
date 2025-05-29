@@ -26,11 +26,9 @@ export default function LoginPage() {
 
       const data = await response.json();
 
-      console.log({data});
-
       if (response.ok) {
-        // router.push('/admin/dashboard')
-        // router.refresh() // Refresh to update auth state
+        router.push('/admin/dashboard')
+        router.refresh() // Refresh to update auth state
       } else {
         setError(data.error || 'Login failed')
       }

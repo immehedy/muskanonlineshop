@@ -26,10 +26,6 @@ interface ShippingAddress {
 
 interface PaymentMethod {
   type: string;
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-  cardholderName: string;
 }
 
 // --- Main CheckoutPage ---
@@ -48,15 +44,11 @@ export default function CheckoutPage() {
     city: '',
     state: '',
     zipCode: '',
-    country: 'US'
+    country: 'Bangladesh'
   });
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>({
-    type: 'card',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    cardholderName: ''
+    type: 'cod'
   });
 
   useEffect(() => {
