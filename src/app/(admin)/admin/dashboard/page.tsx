@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   const fetchDashboardStats = async () => {
     try {
-      const response = await fetch('/api/admin/dashboard')
+      const response = await fetch('/api/dashboard')
       const data = await response.json()
       setStats(data)
     } catch (error) {
@@ -71,7 +71,7 @@ export default function Dashboard() {
             <div className="text-2xl">💰</div>
             <div className="ml-4">
               <p className="text-gray-600">Total Revenue</p>
-              <p className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</p>
+              <p className="text-2xl font-bold">${stats.totalRevenue}</p>
             </div>
           </div>
         </div>

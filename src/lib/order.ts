@@ -149,4 +149,78 @@ export class OrderDatabase {
       processingOrders: 0
     };
   }
+
+  static async getAllOrders(options: {
+  page: number;
+  limit: number;
+  status?: string | null;
+  search?: string | null;
+  sortBy: string;
+  sortOrder: string;
+}) {
+  const { page, limit, status, search, sortBy, sortOrder } = options;
+  const skip = (page - 1) * limit;
+
+  try {
+    // Build filter query
+    const filter: any = {};
+    
+    if (status && status !== 'all') {
+      filter.status = status;
+    }
+
+    if (search) {
+      filter.$or = [
+        { orderNumber: { $regex: search, $options: 'i' } },
+        { 'shippingAddress.email': { $regex: search, $options: 'i' } },
+        { 'shippingAddress.firstName': { $regex: search, $options: 'i' } },
+        { 'shippingAddress.lastName': { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Build sort query
+    const sortOptions: any = {};
+    sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
+
+    const [orders, total] = await Promise.all([
+      Order.find(filter)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Order.countDocuments(filter)
+    ]);
+
+    return {
+      data: orders,
+      total
+    };
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw new Error('Failed to retrieve orders');
+  }
+}
+
+static async updateOrder(orderId: string, updates: Partial<IOrder>) {
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      {
+        ...updates,
+        updatedAt: new Date()
+      },
+      { new: true, runValidators: true }
+    ).lean();
+
+    if (!updatedOrder) {
+      throw new Error('Order not found');
+    }
+
+    return updatedOrder;
+  } catch (error) {
+    console.error('Error updating order:', error);
+    throw new Error('Failed to update order');
+  }
+}
+
 }
