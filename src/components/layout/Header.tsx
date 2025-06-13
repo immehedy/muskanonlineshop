@@ -158,7 +158,7 @@ const Header = () => {
                       </div>
 
                       {/* Footer */}
-                      <div className="p-4 bg-gray-50 border-t">
+                      <div className="p-4 bg-gray-50">
                         <div className="flex justify-between items-center mb-3">
                           <button
                             onClick={clearCart}
