@@ -42,14 +42,14 @@ export class OrderDatabase {
             }
           })),
           shippingAddress: {
-            firstName: shippingAddress.firstName,
-            lastName: shippingAddress.lastName,
-            email: shippingAddress.email,
-            phone: shippingAddress.phone,
-            address: shippingAddress.address,
+            firstName: shippingAddress?.firstName,
+            lastName: shippingAddress?.lastName,
+            email: shippingAddress?.email,
+            phone: shippingAddress?.phone,
+            address: shippingAddress?.address,
             city: shippingAddress.city,
-            zipCode: shippingAddress.zipCode,
-            country: shippingAddress.country
+            zipCode: shippingAddress?.zipCode,
+            country: shippingAddress?.country
           },
           paymentMethod: sanitizedPaymentMethod,
           subtotal,

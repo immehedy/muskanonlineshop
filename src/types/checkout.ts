@@ -16,12 +16,12 @@ export interface CartItem {
   export interface ShippingAddress {
     firstName: string;
     lastName: string;
-    email: string;
+    email?: string;
     phone: string;
     address: string;
     city: string;
     state: string;
-    zipCode: string;
+    zipCode?: string;
     country: string;
   }
   

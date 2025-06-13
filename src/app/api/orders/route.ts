@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate shipping address
-    const requiredAddressFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'zipCode'];
+    const requiredAddressFields = ['firstName', 'lastName', 'phone', 'address', 'city'];
     for (const field of requiredAddressFields) {
       if (!shippingAddress[field]) {
         return NextResponse.json({ 
