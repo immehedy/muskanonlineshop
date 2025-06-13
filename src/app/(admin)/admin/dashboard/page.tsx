@@ -1,5 +1,6 @@
 'use client'
 
+import StatCard from '@/components/ui/StatCard'
 import { useState, useEffect } from 'react'
 
 interface DashboardStats {
@@ -155,7 +156,7 @@ export default function Dashboard() {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             <StatCard icon="📦" label="Total Products" value={100} />
-            <StatCard icon="🛒" label="Total Orders" value={stats.totalProducts} />
+            <StatCard icon="🛒" label="Total Orders" value={stats.totalOrders} />
             <StatCard icon="👥" label="Total Users" value={1} />
             <StatCard
               icon="💰"
