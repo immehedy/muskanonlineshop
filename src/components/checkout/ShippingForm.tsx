@@ -40,7 +40,7 @@ export default function ShippingForm({ shippingAddress, setShippingAddress, onNe
   
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email *
+              Email
             </label>
             <input
               id="email"
@@ -48,7 +48,6 @@ export default function ShippingForm({ shippingAddress, setShippingAddress, onNe
               value={shippingAddress.email}
               onChange={(e) => handleChange('email', e.target.value)}
               className="w-full border p-3 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
             />
           </div>
   
@@ -98,7 +97,7 @@ export default function ShippingForm({ shippingAddress, setShippingAddress, onNe
   
             <div>
               <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
-                ZIP Code *
+                ZIP Code
               </label>
               <input
                 id="zipCode"
@@ -106,7 +105,6 @@ export default function ShippingForm({ shippingAddress, setShippingAddress, onNe
                 value={shippingAddress.zipCode}
                 onChange={(e) => handleChange('zipCode', e.target.value)}
                 className="w-full border p-3 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
               />
             </div>
           </fieldset>

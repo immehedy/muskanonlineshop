@@ -15,12 +15,12 @@ import StepIndicator from '@/components/checkout/StepIndicator';
 interface ShippingAddress {
   firstName: string;
   lastName: string;
-  email: string;
+  email?: string;
   phone: string;
   address: string;
   city: string;
   state: string;
-  zipCode: string;
+  zipCode?: string;
   country: string;
 }
 
@@ -121,11 +121,9 @@ export default function CheckoutPage() {
       return (
         shippingAddress.firstName &&
         shippingAddress.lastName &&
-        shippingAddress.email &&
         shippingAddress.phone &&
         shippingAddress.address &&
-        shippingAddress.city &&
-        shippingAddress.zipCode
+        shippingAddress.city
       );
     }
     if (stepNum === 2) {
