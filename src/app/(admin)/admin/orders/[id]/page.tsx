@@ -21,6 +21,14 @@ interface OrderItem {
   }
 }
 
+interface PathaoOrder {
+  consignment_id: string
+  order_status: string
+  delivery_fee: number
+  created_at: string
+  updated_at: string
+}
+
 interface Order {
   _id: string
   orderNumber: string
@@ -48,49 +56,43 @@ interface Order {
   items: OrderItem[]
   createdAt: string
   updatedAt: string
+  pathaoOrder?: PathaoOrder
 }
 
 export default function OrderDetailsPage() {
-  const params = useParams()
-  const router = useRouter()
   
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [updating, setUpdating] = useState(false)
   const [orderId, setOrderId] = useState<string>('')
+  const [pathaoLoading, setPathaoLoading] = useState(false)
+  const [pathaoError, setPathaoError] = useState<string | null>(null)
+
+  const params = useParams()
+  
+  console.log("params", params)
+  console.log("hellr");
 
   // Handle params resolution
   useEffect(() => {
-    const resolveParams = async () => {
-      try {
-        const resolvedParams = await Promise.resolve(params)
-
-        console.log("resolved", resolveParams);
-        const id = resolvedParams?.id as string
-        
-        if (id) {
-          console.log('Order ID resolved:', id)
-          setOrderId(id)
-        } else {
-          setError('No order ID found')
-          setLoading(false)
-        }
-      } catch (err) {
-        console.error('Error resolving params:', err)
-        setError('Failed to resolve order ID')
-        setLoading(false)
-      }
+    const id = params?.id as string
+    if (id) {
+      console.log('Order ID resolved:', id)
+      setOrderId(id)
+    } else {
+      setError('No order ID found')
+      setLoading(false)
     }
-
-    resolveParams()
   }, [params])
+  
 
   const fetchOrder = async (id: string) => {
     try {
       setLoading(true)
       console.log('Fetching order with ID:', id)
-      const response = await fetch(`/api/admin/order/${id}`)
+      const response = await fetch(`/api/admin/orders/${id}`)
+      console.log({response})
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -110,8 +112,8 @@ export default function OrderDetailsPage() {
     
     try {
       setUpdating(true)
-      const response = await fetch(`/api/admin/order/${orderId}`, {
-        method: 'PATCH',
+      const response = await fetch(`/api/admin/orders/${orderId}/order`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -137,8 +139,8 @@ export default function OrderDetailsPage() {
     
     try {
       setUpdating(true)
-      const response = await fetch(`/api/admin/order/${orderId}`, {
-        method: 'PATCH',
+      const response = await fetch(`/api/admin/orders/${orderId}/order`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -156,6 +158,78 @@ export default function OrderDetailsPage() {
       alert('Failed to update payment status')
     } finally {
       setUpdating(false)
+    }
+  }
+
+  const createPathaoOrder = async () => {
+    if (!order || !orderId) return
+    
+    try {
+      setPathaoLoading(true)
+      setPathaoError(null)
+      
+      const response = await fetch(`/api/admin/orders/${orderId}/pathao`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Failed to create Pathao order')
+      }
+
+      const data = await response.json()
+      
+      // Update the order with Pathao information
+      setOrder(prev => prev ? {
+        ...prev,
+        pathaoOrder: data.pathaoOrder,
+        status: 'processing' // Update status when courier order is created
+      } : null)
+      
+      alert('Pathao courier order created successfully!')
+    } catch (error) {
+      console.error('Error creating Pathao order:', error)
+      setPathaoError(error instanceof Error ? error.message : 'Failed to create Pathao order')
+    } finally {
+      setPathaoLoading(false)
+    }
+  }
+
+  const refreshPathaoStatus = async () => {
+    if (!order?.pathaoOrder?.consignment_id || !orderId) return
+    
+    try {
+      setPathaoLoading(true)
+      setPathaoError(null)
+      
+      const response = await fetch(`/api/admin/orders/${orderId}/pathao/status`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Failed to refresh Pathao status')
+      }
+
+      const data = await response.json()
+      
+      // Update the order with latest Pathao information
+      setOrder(prev => prev ? {
+        ...prev,
+        pathaoOrder: data.pathaoOrder
+      } : null)
+      
+    } catch (error) {
+      console.error('Error refreshing Pathao status:', error)
+      setPathaoError(error instanceof Error ? error.message : 'Failed to refresh Pathao status')
+    } finally {
+      setPathaoLoading(false)
     }
   }
 
@@ -184,6 +258,19 @@ export default function OrderDetailsPage() {
       case 'paid': return 'bg-green-100 text-green-800'
       case 'failed': return 'bg-red-100 text-red-800'
       case 'refunded': return 'bg-gray-100 text-gray-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  const getPathaoStatusColor = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'pending_pickup': return 'bg-yellow-100 text-yellow-800'
+      case 'pickup_requested': return 'bg-blue-100 text-blue-800'
+      case 'picked_up': return 'bg-purple-100 text-purple-800'
+      case 'in_transit': return 'bg-indigo-100 text-indigo-800'
+      case 'delivered': return 'bg-green-100 text-green-800'
+      case 'returned': return 'bg-red-100 text-red-800'
+      case 'cancelled': return 'bg-gray-100 text-gray-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -229,11 +316,16 @@ export default function OrderDetailsPage() {
         </div>
         <div className="flex space-x-4">
           <span className={`px-3 py-1 text-sm font-semibold rounded-full ${getStatusColor(order.status)}`}>
-            {order.status}
+            Order: {order.status}
           </span>
           <span className={`px-3 py-1 text-sm font-semibold rounded-full ${getPaymentStatusColor(order.paymentStatus)}`}>
-            {order.paymentStatus}
+            Payment: {order.paymentStatus}
           </span>
+          {order.pathaoOrder && (
+            <span className={`px-3 py-1 text-sm font-semibold rounded-full ${getPathaoStatusColor(order.pathaoOrder.order_status)}`}>
+              Pathao: {order.pathaoOrder.order_status?.replace('_', ' ')}
+            </span>
+          )}
         </div>
       </div>
 
@@ -288,6 +380,20 @@ export default function OrderDetailsPage() {
                   </p>
                 </div>
               </div>
+              {order.pathaoOrder && (
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <div>
+                    <p className="text-sm font-medium">Courier Order Created</p>
+                    <p className="text-xs text-gray-500">
+                      Consignment ID: {order.pathaoOrder.consignment_id}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {new Date(order.pathaoOrder.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              )}
               {order.status !== 'pending' && (
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -310,6 +416,49 @@ export default function OrderDetailsPage() {
               </div>
             </div>
           </div>
+
+          {/* Pathao Courier Information */}
+          {order.pathaoOrder && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold">Pathao Courier Details</h2>
+                <button
+                  onClick={refreshPathaoStatus}
+                  disabled={pathaoLoading}
+                  className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {pathaoLoading ? 'Refreshing...' : 'Refresh Status'}
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-gray-600">Consignment ID</p>
+                  <p className="font-medium">{order.pathaoOrder.consignment_id}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Delivery Status</p>
+                  <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${getPathaoStatusColor(order.pathaoOrder.order_status)}`}>
+                    {order.pathaoOrder.order_status?.replace('_', ' ')}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Delivery Fee</p>
+                  <p className="font-medium">৳{order.pathaoOrder.delivery_fee?.toFixed(2) || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Last Updated</p>
+                  <p className="font-medium text-sm">
+                    {new Date(order.pathaoOrder.updated_at).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+              {pathaoError && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-red-800 text-sm">{pathaoError}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Order Summary & Actions */}
@@ -406,6 +555,32 @@ export default function OrderDetailsPage() {
                   <option value="refunded">Refunded</option>
                 </select>
               </div>
+              
+              {/* Pathao Integration */}
+              <div className="border-t pt-4">
+                <h3 className="text-sm font-medium text-gray-700 mb-3">Pathao Courier</h3>
+                {!order.pathaoOrder ? (
+                  <button
+                    onClick={createPathaoOrder}
+                    disabled={pathaoLoading || order.status === 'cancelled'}
+                    className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {pathaoLoading ? 'Creating Courier Order...' : 'Create Pathao Order'}
+                  </button>
+                ) : (
+                  <div className="text-sm text-green-600">
+                    ✅ Pathao order created
+                    <br />
+                    ID: {order.pathaoOrder.consignment_id}
+                  </div>
+                )}
+                {pathaoError && !pathaoLoading && (
+                  <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-red-800 text-xs">{pathaoError}</p>
+                  </div>
+                )}
+              </div>
+
               {updating && (
                 <div className="text-sm text-blue-600">Updating...</div>
               )}
