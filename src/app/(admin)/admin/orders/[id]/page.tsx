@@ -90,7 +90,7 @@ export default function OrderDetailsPage() {
     try {
       setLoading(true)
       console.log('Fetching order with ID:', id)
-      const response = await fetch(`/api/admin/order/${id}`)
+      const response = await fetch(`/api/admin/orders/${id}`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -110,7 +110,7 @@ export default function OrderDetailsPage() {
     
     try {
       setUpdating(true)
-      const response = await fetch(`/api/admin/order/${orderId}`, {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ export default function OrderDetailsPage() {
     
     try {
       setUpdating(true)
-      const response = await fetch(`/api/admin/order/${orderId}`, {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
