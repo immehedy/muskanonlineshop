@@ -50,11 +50,11 @@ const OrderItemSchema = new Schema({
 const ShippingAddressSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String },
+  email: { type: String, required: false },
   phone: { type: String, required: true },
   address: { type: String, required: true },
   city: { type: String, required: true },
-  zipCode: { type: String },
+  zipCode: { type: String, required: false },
   country: { type: String, required: true, default: 'BD' }
 }, { _id: false });
 
