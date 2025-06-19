@@ -48,7 +48,7 @@ export default function OrdersPage() {
         ...(statusFilter !== 'all' && { status: statusFilter })
       })
 
-      const response = await fetch(`/api/admin/order?${params}`)
+      const response = await fetch(`/api/admin/orders?${params}`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -67,7 +67,7 @@ export default function OrdersPage() {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      const response = await fetch(`/api/admin/order/${orderId}`, {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
