@@ -62,7 +62,7 @@ export default function CheckoutPage() {
     return total + (itemPrice * item.quantity);
   }, 0);
 
-  const shipping = shippingAddress?.city.includes('Dhaka') ? 80 : 130;
+  const shipping = (shippingAddress?.city.includes('Dhaka') || shippingAddress?.city.includes('dhaka') ) ? 80 : 130;
   const tax = 0;
   const total = subtotal + shipping + tax;
 
