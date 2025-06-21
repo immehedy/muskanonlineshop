@@ -60,9 +60,9 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Content section with improved spacing and typography */}
-        <div className="p-6 space-y-4">
+        <div className="p-3 space-y-2">
           {/* Title with gradient text effect */}
-          <h3 className="text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent line-clamp-2 group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent line-clamp-2 group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">
             {fields.title}
           </h3>
           
