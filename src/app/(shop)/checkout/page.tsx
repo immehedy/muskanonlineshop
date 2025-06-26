@@ -1,15 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { CartManager } from '@/lib/cart';
-import { CartItem } from '@/types/checkout';
+import { CartItem, OrderResponse } from '@/types/checkout';
 import { EmptyCart } from '@/components/checkout/EmptyCart';
 import { OrderSummary } from '@/components/checkout/Summary';
 import { ReviewOrder } from '@/components/checkout/ReviewOrder';
 import PaymentForm from '@/components/checkout/PaymentForm';
 import ShippingForm from '@/components/checkout/ShippingForm';
 import StepIndicator from '@/components/checkout/StepIndicator';
+import api from '@/lib/api';
 
 // --- Interfaces ---
 interface ShippingAddress {
@@ -30,7 +30,6 @@ interface PaymentMethod {
 
 // --- Main CheckoutPage ---
 export default function CheckoutPage() {
-  const router = useRouter();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
@@ -88,12 +87,9 @@ export default function CheckoutPage() {
           total
         }
       };
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData),
-      });
-      const result = await response.json();
+
+      const result = await api.post<OrderResponse>('/api/orders', orderData);
+      
       if (result.success) {
         CartManager.clearCart();
         window.location.reload();
