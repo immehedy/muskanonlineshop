@@ -73,19 +73,44 @@ export default function OrdersPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ status: newStatus })
-      })
-
+      });
+  
       if (!response.ok) {
-        throw new Error('Failed to update order status')
+        throw new Error('Failed to update order status');
       }
+  
+      const updatedOrder = await response.json();
 
-      // Refresh orders list
-      fetchOrders(currentPage)
+  
+      // 🔔 Trigger Steadfast dispatch only if status is "processing"
+      if (newStatus === 'processing') {
+        const dispatchRes = await fetch('/api/admin/orders/steadfast', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedOrder)
+        });
+  
+        if (!dispatchRes.ok) {
+          const err = await dispatchRes.json();
+          console.error('Dispatch failed:', err);
+          alert('Order status updated, but dispatch failed.');
+        } else {
+          const data = await dispatchRes.json();
+          console.log('Dispatch success:', data);
+          alert('Order dispatched to Steadfast successfully.');
+        }
+      }
+  
+      // 🔁 Refresh orders list
+      fetchOrders(currentPage);
     } catch (error) {
-      console.error('Error updating order status:', error)
-      alert('Failed to update order status')
+      console.error('Error updating order status:', error);
+      alert('Failed to update order status');
     }
-  }
+  };
+  
 
   useEffect(() => {
     fetchOrders(1)

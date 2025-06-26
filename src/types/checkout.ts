@@ -43,6 +43,7 @@ export interface CartItem {
     tax: number;
     total: number;
     status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+    note?: string;
     createdAt: Date;
     orderNumber: string;
   }
