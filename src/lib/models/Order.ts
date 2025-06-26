@@ -82,8 +82,6 @@ const OrderSchema = new Schema<IOrder>({
   timestamps: true
 });
 
-// Create indexes for better performance
-OrderSchema.index({ orderNumber: 1 });
 OrderSchema.index({ 'shippingAddress.email': 1 });
 OrderSchema.index({ status: 1 });
 OrderSchema.index({ createdAt: -1 });

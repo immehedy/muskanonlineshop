@@ -111,7 +111,7 @@ export default function OrderDetailsPage() {
     try {
       setUpdating(true)
       const response = await fetch(`/api/admin/orders/${orderId}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -124,6 +124,27 @@ export default function OrderDetailsPage() {
 
       const data = await response.json()
       setOrder(data.order)
+
+      // 🔔 Trigger Steadfast dispatch only if status is "processing"
+      if (newStatus === 'processing') {
+        const dispatchRes = await fetch('/api/admin/orders/steadfast', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+  
+        if (!dispatchRes.ok) {
+          const err = await dispatchRes.json();
+          console.error('Dispatch failed:', err);
+          alert('Order status updated, but dispatch failed.');
+        } else {
+          const data = await dispatchRes.json();
+          console.log('Dispatch success:', data);
+          alert('Order dispatched to Steadfast successfully.');
+        }
+      }
     } catch (error) {
       console.error('Error updating order status:', error)
       alert('Failed to update order status')
@@ -138,7 +159,7 @@ export default function OrderDetailsPage() {
     try {
       setUpdating(true)
       const response = await fetch(`/api/admin/orders/${orderId}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },

@@ -59,9 +59,10 @@ const Header = () => {
             {/* Cart with Dropdown */}
             <div 
               className="relative"
+              onClick={() => setIsCartOpen(!isCartOpen)}
             >
               <div className="relative cursor-pointer">
-                <ShoppingCart className="h-6 w-6 text-foreground hover:text-[#247a95] transition-colors" onClick={() => setIsCartOpen(!isCartOpen)} />
+                <ShoppingCart className="h-6 w-6 text-foreground hover:text-[#247a95] transition-colors"  />
                 {cartItemCount > 0 && (
                   <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 bg-[#ff4d4f] text-white text-xs flex items-center justify-center">
                     {cartItemCount}

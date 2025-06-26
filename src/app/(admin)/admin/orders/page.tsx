@@ -19,7 +19,7 @@ interface Order {
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
   paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded'
   total: number
-  orderDate: string
+  createdAt: string
   estimatedDelivery: string
   items: Array<{
     id: string
@@ -68,24 +68,49 @@ export default function OrdersPage() {
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
       const response = await fetch(`/api/admin/orders/${orderId}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ status: newStatus })
-      })
-
+      });
+  
       if (!response.ok) {
-        throw new Error('Failed to update order status')
+        throw new Error('Failed to update order status');
       }
+  
+      const updatedOrder = await response.json();
 
-      // Refresh orders list
-      fetchOrders(currentPage)
+  
+      // 🔔 Trigger Steadfast dispatch only if status is "processing"
+      if (newStatus === 'processing') {
+        const dispatchRes = await fetch('/api/admin/orders/steadfast', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedOrder)
+        });
+  
+        if (!dispatchRes.ok) {
+          const err = await dispatchRes.json();
+          console.error('Dispatch failed:', err);
+          alert('Order status updated, but dispatch failed.');
+        } else {
+          const data = await dispatchRes.json();
+          console.log('Dispatch success:', data);
+          alert('Order dispatched to Steadfast successfully.');
+        }
+      }
+  
+      // 🔁 Refresh orders list
+      fetchOrders(currentPage);
     } catch (error) {
-      console.error('Error updating order status:', error)
-      alert('Failed to update order status')
+      console.error('Error updating order status:', error);
+      alert('Failed to update order status');
     }
-  }
+  };
+  
 
   useEffect(() => {
     fetchOrders(1)
@@ -210,7 +235,7 @@ export default function OrdersPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">
-                        {order.orderNumber}
+                        {`${order.orderNumber.substring(0, 3)}...${order.orderNumber.slice(-4)}`}
                       </div>
                       <div className="text-sm text-gray-500">
                         {order.items.length} item{order.items.length !== 1 ? 's' : ''}
@@ -228,7 +253,7 @@ export default function OrdersPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {new Date(order.orderDate).toLocaleDateString()}
+                    {new Date(order.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
