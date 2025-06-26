@@ -1,41 +1,70 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { CartItem, PaymentMethod } from '@/types/checkout';
 import { OrderDatabase } from '@/lib/order';
+import { NextRequest, NextResponse } from 'next/server';
+
+interface DashboardStats {
+  totalProducts: number;
+  totalOrders: number;
+  // monthlyRevenue: number,
+  // totalRevenue: number,
+}
+
+interface RecentOrder {
+  id: string;
+  orderNumber: string;
+  ShippingAddress: {
+    firstName: string,
+    email: string
+  }
+  customerEmail: string;
+  customerName?: string;
+  total: number;
+  status: string;
+  createdAt: string;
+  itemCount: number;
+}
+
+interface LowStockProduct {
+  id: string;
+  name: string;
+  currentStock: number;
+  minStockLevel: number;
+  price: number;
+  image?: string;
+}
+
+interface OrderStatusCount {
+  status: string;
+  count: number;
+}
+
+interface MonthlyRevenue {
+  month: string;
+  revenue: number;
+  orderCount: number;
+}
 
 export async function GET(request: NextRequest) {
-    try {
-      const { searchParams } = new URL(request.url);
-      const email = searchParams.get('email');
-      const orderId = searchParams.get('orderId');
-      const orderNumber = searchParams.get('orderNumber');
-  
-      if (orderId) {
-        const order = await OrderDatabase.getOrder(orderId);
-        if (!order) {
-          return NextResponse.json({ error: 'Order not found' }, { status: 404 });
-        }
-        return NextResponse.json({ order });
-      }
-  
-      if (orderNumber) {
-        const order = await OrderDatabase.getOrderByNumber(orderNumber);
-        if (!order) {
-          return NextResponse.json({ error: 'Order not found' }, { status: 404 });
-        }
-        return NextResponse.json({ order });
-      }
-  
-      if (email) {
-        const orders = await OrderDatabase.getOrdersByEmail(email);
-        return NextResponse.json({ orders });
-      }
-  
-      return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
-  
-    } catch (error) {
-      console.error('Order retrieval error:', error);
-      return NextResponse.json({ 
-        error: 'Internal server error' 
-      }, { status: 500 });
-    }
+  try {
+    // You might want to add authentication here to ensure only admins can access this
+    // const session = await getServerSession(authOptions);
+    // if (!session || session.user.role !== 'admin') {
+    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // }
+
+    const stats = await OrderDatabase.getOrderStats();
+    
+    return NextResponse.json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    console.error('Error fetching dashboard stats:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: 'Failed to fetch dashboard stats' 
+      }, 
+      { status: 500 }
+    );
   }
+}

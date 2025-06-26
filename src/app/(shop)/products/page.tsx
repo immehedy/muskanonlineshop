@@ -28,8 +28,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const totalPages = Math.ceil(productsData.total / limit);
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8">All Products</h1>
+    <div className="container mx-auto px-4 py-4">
+      <h1 className="text-3xl font-semibold mb-4">All Products</h1>
 
       <div>
           <ProductGrid products={productsData.items} />

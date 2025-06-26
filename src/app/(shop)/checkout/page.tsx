@@ -15,21 +15,17 @@ import StepIndicator from '@/components/checkout/StepIndicator';
 interface ShippingAddress {
   firstName: string;
   lastName: string;
-  email: string;
+  email?: string;
   phone: string;
   address: string;
   city: string;
   state: string;
-  zipCode: string;
+  zipCode?: string;
   country: string;
 }
 
 interface PaymentMethod {
   type: string;
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-  cardholderName: string;
 }
 
 // --- Main CheckoutPage ---
@@ -48,15 +44,11 @@ export default function CheckoutPage() {
     city: '',
     state: '',
     zipCode: '',
-    country: 'US'
+    country: 'Bangladesh'
   });
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>({
-    type: 'card',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    cardholderName: ''
+    type: 'cod'
   });
 
   useEffect(() => {
@@ -70,7 +62,7 @@ export default function CheckoutPage() {
     return total + (itemPrice * item.quantity);
   }, 0);
 
-  const shipping = shippingAddress?.city.includes('Dhaka') ? 60 : 120;
+  const shipping = (shippingAddress?.city.includes('Dhaka') || shippingAddress?.city.includes('dhaka') ) ? 80 : 130;
   const tax = 0;
   const total = subtotal + shipping + tax;
 
@@ -121,11 +113,9 @@ export default function CheckoutPage() {
       return (
         shippingAddress.firstName &&
         shippingAddress.lastName &&
-        shippingAddress.email &&
         shippingAddress.phone &&
         shippingAddress.address &&
-        shippingAddress.city &&
-        shippingAddress.zipCode
+        shippingAddress.city
       );
     }
     if (stepNum === 2) {
