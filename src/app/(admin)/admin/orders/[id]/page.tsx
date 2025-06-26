@@ -111,7 +111,7 @@ export default function OrderDetailsPage() {
     try {
       setUpdating(true)
       const response = await fetch(`/api/admin/orders/${orderId}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -138,7 +138,7 @@ export default function OrderDetailsPage() {
     try {
       setUpdating(true)
       const response = await fetch(`/api/admin/orders/${orderId}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
