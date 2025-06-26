@@ -19,7 +19,7 @@ interface Order {
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
   paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded'
   total: number
-  orderDate: string
+  createdAt: string
   estimatedDelivery: string
   items: Array<{
     id: string
@@ -235,7 +235,7 @@ export default function OrdersPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">
-                        {order.orderNumber}
+                        {`${order.orderNumber.substring(0, 3)}...${order.orderNumber.slice(-4)}`}
                       </div>
                       <div className="text-sm text-gray-500">
                         {order.items.length} item{order.items.length !== 1 ? 's' : ''}
@@ -253,7 +253,7 @@ export default function OrdersPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {new Date(order.orderDate).toLocaleDateString()}
+                    {new Date(order.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
