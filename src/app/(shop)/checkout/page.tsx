@@ -86,7 +86,6 @@ export default function CheckoutPage() {
       };
 
       const result = await api.post<OrderResponse>('/api/orders', orderData);
-
       if (result.success) {
         // 🔁 Generate unique event ID for deduplication
         const eventId = `purchase_${Date.now()}`;
