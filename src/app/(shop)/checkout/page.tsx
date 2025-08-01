@@ -11,7 +11,6 @@ import ShippingForm from '@/components/checkout/ShippingForm';
 import StepIndicator from '@/components/checkout/StepIndicator';
 import api from '@/lib/api';
 
-// --- Interfaces ---
 interface ShippingAddress {
   firstName: string;
   lastName: string;
@@ -28,7 +27,6 @@ interface PaymentMethod {
   type: string;
 }
 
-// --- Main CheckoutPage ---
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -55,13 +53,12 @@ export default function CheckoutPage() {
     setCartItems(items);
   }, []);
 
-  // Calculate totals
   const subtotal = cartItems.reduce((total, item) => {
     const itemPrice = item.product?.fields?.discountedPrice || item.price;
     return total + (itemPrice * item.quantity);
   }, 0);
 
-  const shipping = (shippingAddress?.city.includes('Dhaka') || shippingAddress?.city.includes('dhaka') ) ? 80 : 130;
+  const shipping = (shippingAddress.city?.toLowerCase().includes('dhaka')) ? 80 : 130;
   const tax = 0;
   const total = subtotal + shipping + tax;
 
@@ -89,8 +86,28 @@ export default function CheckoutPage() {
       };
 
       const result = await api.post<OrderResponse>('/api/orders', orderData);
-      
       if (result.success) {
+        // 🔁 Generate unique event ID for deduplication
+        const eventId = `purchase_${Date.now()}`;
+
+        // 🎯 Send to Facebook Pixel (client-side)
+        window.fbq('track', 'Purchase', {
+          value: total,
+          currency: 'BDT',
+          eventID: eventId
+        });
+
+        // 🔁 Send to Facebook Conversion API (server-side)
+        await fetch('/api/fb-conversion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event_name: 'Purchase',
+            event_id: eventId,
+            url: window.location.href,
+          }),
+        });
+
         CartManager.clearCart();
         window.location.reload();
       } else {
@@ -115,9 +132,7 @@ export default function CheckoutPage() {
       );
     }
     if (stepNum === 2) {
-      return (
-        paymentMethod.type
-      );
+      return paymentMethod.type;
     }
     return true;
   };
