@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ShoppingCart, Check, Minus, Plus } from 'lucide-react';
 import { Product } from '@/types/contentful';
 import { useCartStore } from '@/stores/useCartStore';
+import { useRouter } from 'next/navigation';
 
 type AddToCartButtonProps = {
   product: any;
@@ -35,6 +36,10 @@ export default function AddToCartButton({ product, disabled = false, className }
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+
+  const router = useRouter();
 
   // Use the cart store
   const addToCart = useCartStore(state => state.addToCart);
@@ -43,6 +48,27 @@ export default function AddToCartButton({ product, disabled = false, className }
   // Check if product is already in cart
   const productInCart = cartItems.find(item => item.id === product?.sys?.id);
   const currentQuantityInCart = productInCart?.quantity || 0;
+
+  
+
+  const handleBuyNow = async () => {
+    setIsProcessing(true);
+
+    // Optionally: clear cart before direct buy (depends on your flow)
+    // useCartStore.setState({ items: [] });
+
+    // Add item to cart
+    addToCart(product, quantity);
+
+    // Persist cart in sessionStorage (mimic your initializeCart logic)
+    if (typeof window !== 'undefined') {
+      const cartItems = useCartStore.getState().items;
+      sessionStorage.setItem('cart', JSON.stringify(cartItems));
+    }
+
+    // Redirect to checkout page
+    router.push('/checkout');
+  };
 
   const handleAddToCart = async () => {
     setIsAdding(true);
@@ -67,7 +93,7 @@ export default function AddToCartButton({ product, disabled = false, className }
     <div className="space-y-3 sm:space-y-4">
       {/* Quantity Selector */}
       <div className="flex items-center justify-center sm:justify-start">
-        <div className="flex items-center border-2 border-gray-200 rounded-lg sm:rounded-xl bg-white shadow-sm">
+        <div className="flex items-center border-2 border-gray-200 rounded-lg sm:rounded-xl bg-white shadow-sm mx-auto">
           <button
             onClick={decrementQuantity}
             disabled={quantity <= 1}
@@ -105,6 +131,7 @@ export default function AddToCartButton({ product, disabled = false, className }
       )}
       
       {/* Add to Cart Button */}
+      <div className='flex flex-col md:flex-row items-center justify-between gap-4'>
       <button
         onClick={handleAddToCart}
         disabled={isAdding || isAdded || disabled}
@@ -147,6 +174,30 @@ export default function AddToCartButton({ product, disabled = false, className }
           </>
         )}
       </button>
+      <button
+      onClick={handleBuyNow}
+      disabled={isProcessing || disabled}
+      className={`
+        w-full flex items-center justify-center gap-2 
+        py-3 sm:py-4 px-4 sm:px-6 
+        rounded-lg sm:rounded-xl 
+        text-white font-bold 
+        text-sm sm:text-base
+        transition-all duration-300 
+        transform hover:scale-105 
+        shadow-lg hover:shadow-xl 
+        disabled:hover:scale-100
+        ${disabled ? "bg-gray-400 cursor-not-allowed opacity-50" : "bg-gradient-to-r from-[#e38c25] to-[#bb5d01] hover:from-[#bb5d01] hover:to-[#a34a00]"}
+        ${className}
+      `}
+    >
+      <ShoppingCart size={18} className="sm:w-5 sm:h-5" />
+      <span>
+        {isProcessing ? "Processing..." : "Buy Now"}
+        {quantity > 1 ? ` (${quantity})` : ''}
+      </span>
+    </button>
+      </div>
       
       {/* Mobile-specific additional info */}
       <div className="sm:hidden">
