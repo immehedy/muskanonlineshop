@@ -87,17 +87,17 @@ export default function CheckoutPage() {
 
       const result = await api.post<OrderResponse>('/api/orders', orderData);
       if (result.success) {
-        // 🔁 Generate unique event ID for deduplication
+        // Generate unique event ID for deduplication
         const eventId = `purchase_${Date.now()}`;
 
-        // 🎯 Send to Facebook Pixel (client-side)
+        // Send to Facebook Pixel (only for client side)
         window.fbq('track', 'Purchase', {
           value: total,
           currency: 'BDT',
           eventID: eventId
         });
 
-        // 🔁 Send to Facebook Conversion API (server-side)
+        // Send to Facebook Conversion API (server-side)
         await fetch('/api/fb-conversion', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
