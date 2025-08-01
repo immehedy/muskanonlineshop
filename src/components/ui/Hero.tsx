@@ -24,7 +24,7 @@ const Hero = ({hero} : any) => {
               <Link href="/products" className="inline-flex items-center justify-center px-6 py-3 bg-[#247a95] text-white font-medium rounded-lg hover:bg-[#247a95]/90 transition-colors shadow-lg shadow-[#247a95]/20">
                 {ctaText} <ChevronRight className="ml-2 w-5 h-5" />
               </Link>
-              <Link href="/new-arrivals" className="inline-flex items-center justify-center px-6 py-3 bg-accent-foreground/10 text-accent-foreground font-medium rounded-lg hover:bg-accent-foreground/20 transition-colors">
+              <Link href="/products" className="inline-flex items-center justify-center px-6 py-3 bg-accent-foreground/10 text-accent-foreground font-medium rounded-lg hover:bg-accent-foreground/20 transition-colors">
                 Explore New Arrivals
               </Link>
             </div>
