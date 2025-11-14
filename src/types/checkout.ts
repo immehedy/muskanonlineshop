@@ -43,6 +43,24 @@ export interface CartItem {
     tax: number;
     total: number;
     status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+    note?: string;
     createdAt: Date;
     orderNumber: string;
   }
+
+
+export interface OrderResponse {
+  id: string;
+  status: string;
+  message: string;
+  success: boolean;
+  error?: string;
+  orderId?: string;
+}
+
+export interface ApiResponse<T = any> {
+  success: boolean;
+  status: number;
+  data: T;
+  error?: string; // optional: include for failed responses
+}

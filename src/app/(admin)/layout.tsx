@@ -44,17 +44,16 @@ export default function AdminLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="min-h-screen bg-gray-100">
-          <div className="flex">
-            <Sidebar />
-            <div className="flex-1 flex flex-col">
-              <Header />
-              <main className="flex-1 p-6">
-                {children}
-              </main>
-            </div>
-          </div>
-        </div>
+      <div className="flex min-h-screen overflow-hidden">
+  <Sidebar />
+  <div className="flex flex-col flex-1 min-w-0">
+    <Header />
+    <main className="p-6 overflow-auto">
+      {children}
+    </main>
+  </div>
+</div>
+
       </body>
     </html>
   )

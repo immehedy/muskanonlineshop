@@ -101,9 +101,9 @@ export class OrderDatabase {
   static calculateShipping(items: CartItem[], address: ShippingAddress): number {
     const city = address.city?.trim().toLowerCase();
     if (city === 'dhaka') {
-      return 60;
+      return 80;
     } else {
-      return 120;
+      return 130;
     }
   }
   

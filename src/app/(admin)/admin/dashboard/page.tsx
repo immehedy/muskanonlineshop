@@ -1,6 +1,8 @@
 'use client'
 
 import StatCard from '@/components/ui/StatCard'
+import api from '@/lib/api'
+import { ApiResponse } from '@/types/checkout'
 import { useState, useEffect } from 'react'
 
 interface DashboardStats {
@@ -27,23 +29,13 @@ export default function Dashboard() {
       setLoading(true)
       setError(null)
       
-      const response = await fetch('/api/admin/dashboard', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
+      const response = await api.get<ApiResponse>('/api/admin/dashboard')
       
-      if (!response.ok) {
+      if (!response.success) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      
-      const data = await response.json()
-      console.log('Dashboard stats:', data)
-      
-      // Assuming your API returns the stats in a 'data' property
-      // Adjust this based on your actual API response structure
-      setStats(data?.data || data)
+
+      setStats(response?.data)
     } catch (error) {
       console.error('Error fetching dashboard stats:', error)
       setError('Failed to fetch dashboard stats')
