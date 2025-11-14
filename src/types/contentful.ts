@@ -28,6 +28,37 @@ export interface ContentfulImage {
       image?: ContentfulImage;
     };
   }
+
+  export interface ProductVariant {
+    metadata: {
+      tags: any[];
+      concepts: any[];
+    };
+    sys: {
+      space: any;
+      id: string;
+      type: string;
+      createdAt: string;
+      updatedAt: string;
+      environment: any;
+      publishedVersion: number;
+      revision: number;
+      contentType: any;
+      locale: string;
+    };
+    fields: {
+      name: string;
+      sku: string;
+      price: number;
+      discountedPrice?: number;
+      stockQty: number;
+      attributes?: {
+        [key: string]: string;
+      };
+      variantImages?: ContentfulImage[];
+      isDefault?: boolean;
+    };
+  }
   
   export interface Product {
     sys: {
@@ -47,6 +78,7 @@ export interface ContentfulImage {
       slug: string;
       description: any;            // Rich text
       images: ContentfulImage[];   // Media, many files
+      variants?: ProductVariant[];
       price: number;
       discountedPrice?: number;    // Changed from "compareAtPrice" to "discountedPrice"
       sku: string;
