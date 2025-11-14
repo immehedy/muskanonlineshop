@@ -30,6 +30,7 @@ export class OrderDatabase {
             name: item.title, // Using 'name' field as required by schema
             price: item.price,
             quantity: item.quantity,
+            sku: item.sku,
             product: {
               id: item.product?.sys?.id || item.id,
               title: item.product?.fields?.title || item.title,

@@ -9,6 +9,7 @@ interface OrderItem {
   name: string
   price: number
   quantity: number
+  sku?: string
   product: {
     id: string
     title: string
@@ -281,8 +282,8 @@ export default function OrderDetailsPage() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-medium">{item.name}</h3>
-                    {item.product?.sku && (
-                      <p className="text-sm text-gray-500">SKU: {item.product.sku}</p>
+                    {item?.sku && (
+                      <p className="text-sm text-gray-500">SKU: {item.sku}</p>
                     )}
                     <p className="text-sm text-gray-600">
                       Quantity: {item.quantity} × ৳{item.price.toFixed(2)}

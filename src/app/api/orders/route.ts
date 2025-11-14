@@ -31,15 +31,6 @@ export async function POST(request: NextRequest) {
     // Create order in database
     const order = await OrderDatabase.createOrder(items, shippingAddress, paymentMethod);
 
-    // Update payment status
-    // await OrderDatabase.updatePaymentStatus(order.id.toString(), 'paid');
-
-    // In a real app, you would also
-    // 1. Send confirmation email
-    // 2. Update inventory in Contentful
-    // 3. Trigger fulfillment process
-    // 4. Log analytics events
-
     return NextResponse.json({ 
       success: true, 
       order: {
