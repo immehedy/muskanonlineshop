@@ -84,7 +84,7 @@ export default function OrdersPage() {
   
       // 🔔 Trigger Steadfast dispatch only if status is "processing"
       if (newStatus === 'processing') {
-        const dispatchRes = await fetch('/api/admin/orders/steadfast', {
+        const dispatchRes = await fetch('/api/admin/orders/carry_bee', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

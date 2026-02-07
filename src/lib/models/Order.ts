@@ -49,6 +49,8 @@ export interface IOrder extends Document {
   total: number;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded';
+  deliveryProvider?: String;
+  consignmentId?: String;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -77,7 +79,9 @@ const OrderSchema = new Schema<IOrder>({
     type: String, 
     enum: ['pending', 'paid', 'failed', 'refunded'], 
     default: 'pending' 
-  }
+  },
+  deliveryProvider: { type: String, default: null },
+  consignmentId: { type: String, default: null }, 
 }, {
   timestamps: true
 });
