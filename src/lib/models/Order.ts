@@ -49,8 +49,8 @@ export interface IOrder extends Document {
   total: number;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded';
-  deliveryProvider?: String;
-  consignmentId?: String;
+  deliveryProvider: String;
+  consignmentId: String;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -91,3 +91,5 @@ OrderSchema.index({ status: 1 });
 OrderSchema.index({ createdAt: -1 });
 
 export default mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);
+
+

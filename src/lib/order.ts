@@ -204,6 +204,7 @@ export class OrderDatabase {
 
 static async updateOrder(orderId: string, updates: Partial<IOrder>) {
   try {
+    await dbConnect();
     const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
       {
