@@ -17,17 +17,17 @@ export function useAuth() {
         setIsAuthenticated(true)
       } else {
         setIsAuthenticated(false)
-        router.push('/admin/login')
+        router.push('/login')
       }
     } catch {
       setIsAuthenticated(false)
-      router.push('/admin/login')
+      router.push('/login')
     }
   }
 
   const logout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
-    router.push('/admin/login')
+    router.push('/login')
   }
 
   return { isAuthenticated, logout }
