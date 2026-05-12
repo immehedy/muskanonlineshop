@@ -5,14 +5,25 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   ShoppingCart,
-  Settings,
   X,
   ShieldCheck,
+  ChevronRight,
+  Home,
 } from "lucide-react";
 
 const navigation = [
-  { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "Orders", href: "/admin/orders", icon: ShoppingCart },
+  {
+    name: "ড্যাশবোর্ড",
+    description: "ব্যবসার সারাংশ",
+    href: "/admin/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "অর্ডার",
+    description: "অর্ডার দেখুন ও ম্যানেজ করুন",
+    href: "/admin/orders",
+    icon: ShoppingCart,
+  },
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -31,117 +42,114 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-black/40 transition-opacity lg:hidden ${
-          open
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm transition-opacity lg:hidden ${
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
       />
 
-      {/* Sidebar */}
       <aside
-        className={`fixed z-50 inset-y-0 left-0 w-[280px] bg-slate-900 text-slate-100 transform transition-transform duration-200
-        lg:translate-x-0 lg:static lg:z-auto
-        ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-50 w-[280px] transform border-r border-slate-200 bg-white text-slate-900 shadow-xl transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 lg:shadow-none ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
-        {/* ✅ Make the entire sidebar a flex column with full height */}
-        <div className="h-dvh lg:h-screen flex flex-col">
-          {/* Brand */}
-          <div className="h-16 px-4 flex items-center justify-between border-b border-white/10 flex-shrink-0">
-            <Link href="/admin/dashboard" className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl bg-white/10 ring-1 ring-white/10 flex items-center justify-center">
+        <div className="flex h-dvh flex-col lg:h-screen">
+          <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 px-4">
+            <Link
+              href="/admin/dashboard"
+              onClick={onClose}
+              className="flex min-w-0 items-center gap-3"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white">
                 <ShieldCheck className="h-5 w-5" />
               </div>
-              <div className="leading-tight">
-                <div className="text-sm font-bold">Admin Panel</div>
-                <div className="text-[11px] text-slate-300">Manage everything</div>
+
+              <div className="min-w-0 leading-tight">
+                <div className="truncate text-sm font-black text-slate-950">
+                মুস্কান অনলাইন শপ বিডি
+                </div>
+                <div className="truncate text-xs font-medium text-slate-500">
+                  সহজ ম্যানেজমেন্ট
+                </div>
               </div>
             </Link>
 
             <button
               onClick={onClose}
-              className="lg:hidden p-2 rounded-lg hover:bg-white/10"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 lg:hidden"
               aria-label="Close sidebar"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          {/* ✅ Nav grows + scrolls */}
-          <nav className="p-3 flex-1 overflow-y-auto">
-            <div className="text-[11px] font-semibold text-slate-300 px-3 py-2">
-              Navigation
+          <nav className="flex-1 overflow-y-auto p-4">
+            <div className="mb-2 px-2 text-xs font-bold uppercase tracking-wide text-slate-400">
+              মেনু
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-2">
               {navigation.map((item) => {
                 const active = isActivePath(pathname, item.href);
                 const Icon = item.icon;
 
                 return (
                   <Link
-                    key={item.name}
+                    key={item.href}
                     href={item.href}
                     onClick={onClose}
-                    className={[
-                      "group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold transition",
+                    className={`group flex items-center gap-3 rounded-2xl border px-3 py-3 transition ${
                       active
-                        ? "bg-white/10 ring-1 ring-white/10 text-white"
-                        : "text-slate-200 hover:bg-white/5 hover:text-white",
-                    ].join(" ")}
+                        ? "border-slate-900 bg-slate-900 text-white shadow-sm"
+                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                    }`}
                   >
-                    <span
-                      className={[
-                        "h-9 w-9 rounded-xl flex items-center justify-center ring-1 transition",
+                    <div
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition ${
                         active
-                          ? "bg-blue-500/15 ring-blue-500/30 text-blue-200"
-                          : "bg-white/5 ring-white/10 text-slate-200 group-hover:text-white",
-                      ].join(" ")}
+                          ? "bg-white/15 text-white"
+                          : "bg-slate-100 text-slate-700 group-hover:bg-white"
+                      }`}
                     >
                       <Icon className="h-5 w-5" />
-                    </span>
+                    </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="truncate">{item.name}</div>
-                      <div className="text-[11px] font-medium text-slate-400 truncate">
-                        {item.name === "Orders"
-                          ? "Manage & dispatch"
-                          : "Overview & analytics"}
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-black">{item.name}</div>
+                      <div
+                        className={`mt-0.5 truncate text-xs font-medium ${
+                          active ? "text-slate-200" : "text-slate-500"
+                        }`}
+                      >
+                        {item.description}
                       </div>
                     </div>
 
-                    {active && (
-                      <span className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_0_3px_rgba(96,165,250,0.15)]" />
-                    )}
+                    <ChevronRight
+                      className={`h-4 w-4 shrink-0 transition ${
+                        active ? "text-white" : "text-slate-400 group-hover:text-slate-600"
+                      }`}
+                    />
                   </Link>
                 );
               })}
             </div>
           </nav>
 
-          {/* ✅ Footer stays at bottom ALWAYS */}
-          <div className="p-3 border-t border-white/10 flex-shrink-0">
-            <div className="rounded-2xl bg-white/5 ring-1 ring-white/10 p-3">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center ring-1 ring-white/10">
-                  <Settings className="h-5 w-5 text-slate-200" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold truncate">Quick tips</div>
-                  <div className="text-[11px] text-slate-300 leading-relaxed">
-                    <div>• Processing → dispatch</div>
-                    <div>• Cancelled → cancel</div>
-                  </div>
-                </div>
+          <div className="shrink-0 border-t border-slate-200 p-4">
+            <Link
+              href="/"
+              className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-slate-700 transition hover:bg-white"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-700 ring-1 ring-slate-200">
+                <Home className="h-5 w-5" />
               </div>
-            </div>
-
-            <div className="text-[11px] text-slate-400 mt-3 px-1">
-              © {new Date().getFullYear()} Admin • 2026
-            </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-black">ওয়েবসাইটে যান</div>
+                <div className="truncate text-xs text-slate-500">কাস্টমার সাইট দেখুন</div>
+              </div>
+            </Link>
           </div>
         </div>
       </aside>

@@ -61,26 +61,33 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const status = searchParams.get('status');
-    const search = searchParams.get('search');
-    const sortBy = searchParams.get('sortBy') || 'createdAt';
-    const sortOrder = searchParams.get('sortOrder') || 'desc';
+    const { searchParams } = new URL(request.url)
 
-    // Get all orders with pagination and filters
-    const orders = await OrderDatabase.getAllOrders({
+    const page = Math.max(1, Number(searchParams.get('page') || 1))
+    const limit = Math.min(50, Math.max(1, Number(searchParams.get('limit') || 10)))
+
+    const status = searchParams.get('status') || undefined
+    const search = searchParams.get('search') || undefined
+    const sortBy = searchParams.get('sortBy') || 'createdAt'
+    const sortOrder = searchParams.get('sortOrder') === 'asc' ? 'asc' : 'desc'
+
+    // important: stats should be optional
+    const includeStats = searchParams.get('includeStats') === 'true'
+
+    const ordersPromise = OrderDatabase.getAllOrders({
       page,
       limit,
       status,
       search,
       sortBy,
-      sortOrder
-    });
+      sortOrder,
+    })
 
-    // Get order statistics
-    const stats = await OrderDatabase.getOrderStats();
+    const statsPromise = includeStats
+      ? OrderDatabase.getOrderStats()
+      : Promise.resolve(null)
+
+    const [orders, stats] = await Promise.all([ordersPromise, statsPromise])
 
     return NextResponse.json({
       orders: orders.data,
@@ -88,16 +95,16 @@ export async function GET(request: NextRequest) {
         page,
         limit,
         total: orders.total,
-        totalPages: Math.ceil(orders.total / limit)
+        totalPages: Math.ceil(orders.total / limit),
       },
-      stats
-    });
-
+      ...(includeStats ? { stats } : {}),
+    })
   } catch (error) {
-    console.error('Admin orders retrieval error:', error);
+    console.error('Admin orders retrieval error:', error)
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
-    );
+    )
   }
 }
