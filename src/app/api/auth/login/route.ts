@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }, { status: 200 });
 
     // Set token cookie — secure, httpOnly, sameSite strict, maxAge 7 days
-    response.cookies.set('token', token, {
+    response.cookies.set('muskan-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

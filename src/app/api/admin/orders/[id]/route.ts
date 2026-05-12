@@ -36,6 +36,8 @@ export async function PUT(
     const updates = await request.json();
     
     const order = await OrderDatabase.updateOrder(id, updates);
+
+    console.log({updates, order})
     
     if (!order) {
       return NextResponse.json(
