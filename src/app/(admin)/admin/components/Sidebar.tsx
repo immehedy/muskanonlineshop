@@ -67,7 +67,7 @@ export function Sidebar({
 
               <div className="min-w-0 leading-tight">
                 <div className="truncate text-sm font-black text-slate-950">
-                  Admin Panel
+                মুস্কান অনলাইন শপ বিডি
                 </div>
                 <div className="truncate text-xs font-medium text-slate-500">
                   সহজ ম্যানেজমেন্ট
