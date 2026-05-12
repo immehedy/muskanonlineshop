@@ -44,9 +44,7 @@ export function Sidebar({
     <>
       <div
         className={`fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm transition-opacity lg:hidden ${
-          open
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
       />
@@ -54,13 +52,15 @@ export function Sidebar({
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-[280px] transform border-r border-slate-200 bg-white text-slate-900 shadow-xl transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 lg:shadow-none ${
           open ? "translate-x-0" : "-translate-x-full"
-        }`}>
+        }`}
+      >
         <div className="flex h-dvh flex-col lg:h-screen">
           <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 px-4">
             <Link
               href="/admin/dashboard"
               onClick={onClose}
-              className="flex min-w-0 items-center gap-3">
+              className="flex min-w-0 items-center gap-3"
+            >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white">
                 <ShieldCheck className="h-5 w-5" />
               </div>
