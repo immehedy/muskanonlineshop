@@ -55,7 +55,7 @@ export default function LoginPage() {
               <ShieldCheck className="h-6 w-6" />
             </div>
             <div>
-              <div className="text-lg font-black">মুস্কান অনলাইন শপ বিডি</div>
+              <div className="text-lg font-black">মুসকান অনলাইন শপ বিডি</div>
               <div className="text-sm text-slate-400">
                 অ্যাডমিন ম্যানেজমেন্ট প্যানেল
               </div>
@@ -84,7 +84,7 @@ export default function LoginPage() {
                 <ShieldCheck className="h-7 w-7" />
               </div>
               <h1 className="mt-4 text-2xl font-black text-slate-950">
-              মুস্কান অনলাইন শপ বিডি
+                মুসকান অনলাইন শপ বিডি
               </h1>
             </div>
 
