@@ -8,11 +8,12 @@ export function OrderSummary({
   const formatPrice = (value: number) => `৳${Number(value || 0).toFixed(2)}`;
 
   return (
-    <aside className="fixed inset-x-0 bottom-0 z-50 max-h-[70vh] w-full overflow-hidden rounded-t-3xl border border-gray-200 bg-white shadow-2xl shadow-gray-400/30 lg:sticky lg:top-4 lg:max-h-none lg:rounded-2xl">
+    <aside className="w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-gray-400/30 lg:sticky lg:top-4">
       {/* Header */}
       <div className="flex items-center justify-between bg-[#207b95] px-4 py-3 text-white lg:px-5 lg:py-4">
         <div>
           <h2 className="text-base font-bold lg:text-xl">অর্ডার সামারি</h2>
+
           <p className="text-xs text-white/80 lg:text-sm">
             {cartItems.length} টি পণ্য
           </p>
@@ -26,20 +27,22 @@ export function OrderSummary({
         </div>
       </div>
 
-      <div className="max-h-[48vh] overflow-y-auto p-4 lg:max-h-none lg:p-5">
+      {/* Content */}
+      <div className="p-4 lg:p-5">
         {/* Cart Items */}
         <div className="mb-4 space-y-2 lg:space-y-3">
           {cartItems.map((item: any) => {
             const currentPrice =
               item.product?.fields?.discountedPrice || item.price;
+
             const originalPrice = item.product?.fields?.price;
+
             const hasDiscount = originalPrice && currentPrice < originalPrice;
 
             return (
               <div
                 key={item.id}
-                className="rounded-xl border border-gray-100 bg-gray-50 p-3"
-              >
+                className="rounded-xl border border-gray-100 bg-gray-50 p-3">
                 <div className="flex justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <h3 className="line-clamp-1 text-xs font-semibold text-gray-900 lg:text-sm">
@@ -78,6 +81,7 @@ export function OrderSummary({
 
                   <div className="whitespace-nowrap text-right">
                     <p className="text-[11px] text-gray-500">মোট</p>
+
                     <p className="text-sm font-bold text-gray-900">
                       {formatPrice(currentPrice * item.quantity)}
                     </p>
@@ -99,6 +103,7 @@ export function OrderSummary({
 
           <div className="flex justify-between text-gray-600">
             <span>শিপিং</span>
+
             <span className="font-medium text-gray-800">
               {shipping > 0 ? formatPrice(shipping) : "ফ্রি"}
             </span>
@@ -113,6 +118,7 @@ export function OrderSummary({
 
           <div className="flex items-center justify-between border-t border-dashed border-gray-300 pt-3">
             <span className="text-sm font-bold text-gray-900">সর্বমোট</span>
+
             <span className="text-xl font-extrabold text-[#207b95]">
               {formatPrice(total)}
             </span>
