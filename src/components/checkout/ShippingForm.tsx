@@ -9,7 +9,7 @@ export default function ShippingForm({
   };
 
   const inputClass =
-    "h-10 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 outline-none transition focus:border-[#207b95] focus:bg-white focus:ring-3 focus:ring-[#207b95]/10";
+    "h-10 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 text-base text-gray-900 outline-none transition focus:border-[#207b95] focus:bg-white focus:ring-3 focus:ring-[#207b95]/10";
 
   const labelClass = "mb-1.5 block text-xs font-semibold text-gray-600";
 
@@ -17,7 +17,7 @@ export default function ShippingForm({
     <div className="mx-auto w-full max-w-2xl rounded-2xl border border-gray-200 bg-white p-4 shadow-lg shadow-gray-200/60 md:p-5">
       <div className="mb-4">
         <h2 className="text-xl font-bold text-gray-900">শিপিং ঠিকানা</h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-base text-gray-500">
           অর্ডার ডেলিভারির জন্য আপনার তথ্য দিন
         </p>
       </div>
