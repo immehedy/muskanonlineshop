@@ -7,14 +7,19 @@ import {
   Menu,
   LayoutDashboard,
   ShoppingCart,
-  ChevronRight,
   ShieldCheck,
 } from "lucide-react";
 
 function titleFromPath(pathname: string) {
-  if (pathname.startsWith("/admin/orders")) return "Orders";
-  if (pathname.startsWith("/admin/dashboard")) return "Dashboard";
-  return "Admin";
+  if (pathname.startsWith("/admin/orders")) return "অর্ডার";
+  if (pathname.startsWith("/admin/dashboard")) return "ড্যাশবোর্ড";
+  return "অ্যাডমিন";
+}
+
+function subtitleFromPath(pathname: string) {
+  if (pathname.startsWith("/admin/orders")) return "অর্ডার দেখুন ও ম্যানেজ করুন";
+  if (pathname.startsWith("/admin/dashboard")) return "ব্যবসার সারাংশ দেখুন";
+  return "অ্যাডমিন প্যানেল";
 }
 
 function iconFromPath(pathname: string) {
@@ -26,73 +31,60 @@ function iconFromPath(pathname: string) {
 export function Header({ onMenuClick }: { onMenuClick: () => void }) {
   const router = useRouter();
   const pathname = usePathname();
+
   const title = titleFromPath(pathname);
+  const subtitle = subtitleFromPath(pathname);
   const Icon = iconFromPath(pathname);
 
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
-
-      // Re-evaluate auth (middleware/server components) + send user to login
-      router.replace("/login");
-      router.refresh();
-    } catch {
-      // optional: show toast / error
+    } finally {
       router.replace("/login");
       router.refresh();
     }
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
-      <div className="h-16 px-4 md:px-6 flex items-center justify-between gap-3">
-        {/* Left: menu + breadcrumb */}
-        <div className="flex items-center gap-3 min-w-0">
+    <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <div className="flex h-16 items-center justify-between gap-3 px-4 md:px-6">
+        <div className="flex min-w-0 items-center gap-3">
           <button
             onClick={onMenuClick}
-            className="lg:hidden inline-flex items-center justify-center h-10 w-10 rounded-xl border border-slate-200 bg-white hover:bg-slate-50"
-            aria-label="Open menu">
-            <Menu className="h-5 w-5 text-slate-700" />
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 lg:hidden"
+            aria-label="Open menu"
+          >
+            <Menu className="h-5 w-5" />
           </button>
 
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white">
-              <Icon className="h-5 w-5" />
-            </div>
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white">
+            <Icon className="h-5 w-5" />
+          </div>
 
-            <div className="min-w-0">
-              <div className="text-sm font-bold text-slate-900 truncate">
-                {title}
-              </div>
-              <div className="flex items-center gap-1 text-[12px] text-slate-500 truncate">
-                <Link href="/admin/dashboard" className="hover:text-slate-700">
-                  Admin
-                </Link>
-                <ChevronRight className="h-4 w-4" />
-                <span className="truncate">{title}</span>
-              </div>
-            </div>
+          <div className="min-w-0">
+            <h1 className="truncate text-base font-black text-slate-950 md:text-lg">
+              {title}
+            </h1>
+            <p className="hidden truncate text-xs text-slate-500 sm:block">
+              {subtitle}
+            </p>
           </div>
         </div>
 
-        {/* Right: actions */}
-        <div className="flex items-center gap-2">
-          {/* Small profile pill placeholder */}
-          <div className="hidden md:flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
-            <div className="h-8 w-8 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">
-              A
-            </div>
-            <div className="leading-tight">
-              <div className="text-sm font-semibold text-slate-900">Admin</div>
-              <div className="text-[11px] text-slate-500">Online</div>
-            </div>
-          </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href="/admin/dashboard"
+            className="hidden rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 md:inline-flex"
+          >
+            ড্যাশবোর্ড
+          </Link>
 
           <button
             onClick={handleLogout}
-            className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700">
+            className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-bold text-white hover:bg-slate-800"
+          >
             <LogOut className="h-4 w-4" />
-            <span className="hidden sm:inline">Logout</span>
+            <span className="hidden sm:inline">লগআউট</span>
           </button>
         </div>
       </div>
