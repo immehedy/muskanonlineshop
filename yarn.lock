@@ -1293,6 +1293,11 @@ clsx@^2.1.1:
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.1.tgz#eed397c9fd8bd882bfb18deab7102049a2f32999"
   integrity sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==
 
+collapsible@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/collapsible/-/collapsible-1.0.1.tgz#55b74309be19858e7eb2d719a2424591a8f1d8f4"
+  integrity sha512-TkUg++ENnf20d4X7UfBJ7p1zFhJVF52Da7wim7l3RPSwHBzU1VKHucp1DBQn8pvPksG7LlS2v+AOPV0JE0RTIw==
+
 combined-stream@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
