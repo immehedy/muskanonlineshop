@@ -1,13 +1,10 @@
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
 type RequestOptions = RequestInit;
 
 export async function apiClient<T>(
   endpoint: string,
   options: RequestOptions = {}
 ): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const res = await fetch(endpoint, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
@@ -16,9 +13,11 @@ export async function apiClient<T>(
     ...options,
   });
 
+  const data = await res.json().catch(() => null);
+
   if (!res.ok) {
-    throw new Error("API request failed");
+    throw new Error(data?.error || data?.message || "API request failed");
   }
 
-  return res.json();
+  return data as T;
 }
