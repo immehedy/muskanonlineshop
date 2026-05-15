@@ -1,46 +1,49 @@
-import { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import '../globals.css';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import Script from 'next/script';
-import FacebookPixel from '@/components/FacebookPixel';
+import { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "../globals.css";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import Script from "next/script";
+import FacebookPixel from "@/components/FacebookPixel";
+import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  ),
   title: {
-    default: 'Your E-commerce Store | Quality Products Online',
-    template: '%s | Your E-commerce Store',
+    default: "Your E-commerce Store | Quality Products Online",
+    template: "%s | Your E-commerce Store",
   },
-  description: 'Shop the latest products at our online store with free shipping and easy returns.',
+  description:
+    "Shop the latest products at our online store with free shipping and easy returns.",
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
+    type: "website",
+    locale: "en_US",
     url: process.env.NEXT_PUBLIC_SITE_URL,
-    siteName: 'Your E-commerce Store',
+    siteName: "Your E-commerce Store",
     images: [
       {
-        url: '/og-image.jpg',
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: 'Your E-commerce Store',
+        alt: "Your E-commerce Store",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    site: '@yourstorehandle',
+    card: "summary_large_image",
+    site: "@yourstorehandle",
   },
 };
 
-
-const FACEBOOK_PIXEL_ID = process.env.FACEBOOK_PIXEL_ID
+const FACEBOOK_PIXEL_ID = process.env.FACEBOOK_PIXEL_ID;
 
 export default function RootLayout({
   children,
@@ -53,8 +56,8 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
-      <FacebookPixel />
-      <Script
+        <FacebookPixel />
+        <Script
           id="fb-pixel"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -81,7 +84,9 @@ export default function RootLayout({
           />
         </noscript>
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <main className="min-h-screen">
+          <Providers>{children}</Providers>
+        </main>
         <Footer />
       </body>
     </html>

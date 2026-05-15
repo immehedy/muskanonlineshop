@@ -10,41 +10,36 @@ import {
   Mail,
   ShieldCheck,
 } from "lucide-react";
+import { useLogin } from "@/packages/query/src/hooks/useLogin";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const router = useRouter();
+  const loginMutation = useLogin();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        router.push("/admin/dashboard");
-        router.refresh();
-      } else {
-        setError(data.error || "লগইন করা যায়নি");
+    loginMutation.mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          router.push("/admin/dashboard");
+          router.refresh();
+        },
+        onError: (error: any) => {
+          setError(error?.message || "লগইন করা যায়নি");
+        },
       }
-    } catch {
-      setError("কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-    } finally {
-      setLoading(false);
-    }
+    );
   };
+
+  const loading = loginMutation.isPending;
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -108,7 +103,8 @@ export default function LoginPage() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="mb-1.5 block text-sm font-bold text-slate-700">
+                    className="mb-1.5 block text-sm font-bold text-slate-700"
+                  >
                     ইমেইল
                   </label>
 
@@ -131,7 +127,8 @@ export default function LoginPage() {
                 <div>
                   <label
                     htmlFor="password"
-                    className="mb-1.5 block text-sm font-bold text-slate-700">
+                    className="mb-1.5 block text-sm font-bold text-slate-700"
+                  >
                     পাসওয়ার্ড
                   </label>
 
@@ -155,7 +152,8 @@ export default function LoginPage() {
                       className="absolute right-3 top-1/2 inline-flex -translate-y-1/2 items-center justify-center rounded-lg p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
                       aria-label={
                         showPassword ? "Hide password" : "Show password"
-                      }>
+                      }
+                    >
                       {showPassword ? (
                         <EyeOff className="h-5 w-5" />
                       ) : (
@@ -168,7 +166,8 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-black text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60">
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-black text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {loading ? "লগইন হচ্ছে..." : "লগইন"}
                 </button>
