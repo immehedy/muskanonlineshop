@@ -10,41 +10,36 @@ import {
   Mail,
   ShieldCheck,
 } from "lucide-react";
+import { useLogin } from "@/packages/query/src/hooks/auth/useLogin";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const router = useRouter();
+  const loginMutation = useLogin();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        router.push("/admin/dashboard");
-        router.refresh();
-      } else {
-        setError(data.error || "লগইন করা যায়নি");
+    loginMutation.mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          router.push("/admin/dashboard");
+          router.refresh();
+        },
+        onError: (error: any) => {
+          setError(error?.message || "লগইন করা যায়নি");
+        },
       }
-    } catch {
-      setError("কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-    } finally {
-      setLoading(false);
-    }
+    );
   };
+
+  const loading = loginMutation.isPending;
 
   return (
     <main className="min-h-screen bg-slate-50">

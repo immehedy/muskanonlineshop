@@ -1,24 +1,33 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   LogOut,
   Menu,
   LayoutDashboard,
   ShoppingCart,
   ShieldCheck,
+  Loader2,
 } from "lucide-react";
+import { useLogout } from "@/packages/query/src/hooks/auth/useLogout";
 
 function titleFromPath(pathname: string) {
   if (pathname.startsWith("/admin/orders")) return "অর্ডার";
   if (pathname.startsWith("/admin/dashboard")) return "ড্যাশবোর্ড";
+  if (pathname.startsWith("/admin/users")) return "ইউজার";
   return "অ্যাডমিন";
 }
 
 function subtitleFromPath(pathname: string) {
-  if (pathname.startsWith("/admin/orders")) return "অর্ডার দেখুন ও ম্যানেজ করুন";
-  if (pathname.startsWith("/admin/dashboard")) return "ব্যবসার সারাংশ দেখুন";
+  if (pathname.startsWith("/admin/orders"))
+    return "অর্ডার দেখুন ও ম্যানেজ করুন";
+
+  if (pathname.startsWith("/admin/dashboard"))
+    return "ব্যবসার সারাংশ দেখুন";
+
+  if (pathname.startsWith("/admin/users"))
+    return "ইউজার ম্যানেজমেন্ট";
+
   return "অ্যাডমিন প্যানেল";
 }
 
@@ -28,21 +37,27 @@ function iconFromPath(pathname: string) {
   return ShieldCheck;
 }
 
-export function Header({ onMenuClick }: { onMenuClick: () => void }) {
+export function Header({
+  onMenuClick,
+}: {
+  onMenuClick: () => void;
+}) {
   const router = useRouter();
   const pathname = usePathname();
+
+  const logoutMutation = useLogout();
 
   const title = titleFromPath(pathname);
   const subtitle = subtitleFromPath(pathname);
   const Icon = iconFromPath(pathname);
 
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-    } finally {
-      router.replace("/login");
-      router.refresh();
-    }
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        router.replace("/login");
+        router.refresh();
+      },
+    });
   };
 
   return (
@@ -65,6 +80,7 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
             <h1 className="truncate text-base font-black text-slate-950 md:text-lg">
               {title}
             </h1>
+
             <p className="hidden truncate text-xs text-slate-500 sm:block">
               {subtitle}
             </p>
@@ -72,19 +88,29 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <Link
-            href="/admin/dashboard"
-            className="hidden rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 md:inline-flex"
-          >
-            ড্যাশবোর্ড
-          </Link>
 
           <button
             onClick={handleLogout}
-            className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-bold text-white hover:bg-slate-800"
+            disabled={logoutMutation.isPending}
+            className="
+              inline-flex items-center gap-2 rounded-xl
+              bg-slate-900 px-3 py-2
+              text-sm font-bold text-white
+              transition hover:bg-slate-800
+              disabled:cursor-not-allowed disabled:opacity-60
+            "
           >
-            <LogOut className="h-4 w-4" />
-            <span className="hidden sm:inline">লগআউট</span>
+            {logoutMutation.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <LogOut className="h-4 w-4" />
+            )}
+
+            <span className="hidden sm:inline">
+              {logoutMutation.isPending
+                ? "লগআউট হচ্ছে..."
+                : "লগআউট"}
+            </span>
           </button>
         </div>
       </div>
