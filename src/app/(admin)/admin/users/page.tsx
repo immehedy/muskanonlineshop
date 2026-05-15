@@ -1,12 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { Loader2, Plus, Trash2, UserCog, Mail, ShieldCheck } from "lucide-react";
-import { useCurrentUser } from "@/packages/query/src/hooks/useCurrentUser";
-import { useUsers } from "@/packages/query/src/hooks/useUsers";
-import { useDeleteUser } from "@/packages/query/src/hooks/userDeleteUser";
+import {
+  Loader2,
+  Plus,
+  Trash2,
+  UserCog,
+  Mail,
+  ShieldCheck,
+} from "lucide-react";
+import { useCurrentUser } from "@/packages/query/src/hooks/user/useCurrentUser";
+import { useUsers } from "@/packages/query/src/hooks/user/useUsers";
+import { useDeleteUser } from "@/packages/query/src/hooks/user/userDeleteUser";
 import { AdminOnly } from "../components/AdminOnly";
-
 
 export default function UsersPage() {
   const { data: currentUser } = useCurrentUser();
@@ -73,8 +79,7 @@ export default function UsersPage() {
                 return (
                   <div
                     key={user.id}
-                    className="flex flex-col gap-4 px-5 py-4 transition hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between"
-                  >
+                    className="flex flex-col gap-4 px-5 py-4 transition hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex min-w-0 items-center gap-3">
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#207b95]/10 text-[#207b95]">
                         <UserCog className="h-5 w-5" />
@@ -97,8 +102,7 @@ export default function UsersPage() {
                               user.role === "admin"
                                 ? "bg-[#207b95]/10 text-[#207b95]"
                                 : "bg-slate-100 text-slate-600"
-                            }`}
-                          >
+                            }`}>
                             {user.role}
                           </span>
                         </div>
@@ -122,8 +126,7 @@ export default function UsersPage() {
                         type="button"
                         onClick={() => handleDelete(user.id)}
                         disabled={isSelf || deleteUserMutation.isPending}
-                        className="inline-flex h-9 items-center justify-center gap-2 rounded-xl border border-red-100 bg-red-50 px-3 text-xs font-bold text-red-600 transition hover:bg-red-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
-                      >
+                        className="inline-flex h-9 items-center justify-center gap-2 rounded-xl border border-red-100 bg-red-50 px-3 text-xs font-bold text-red-600 transition hover:bg-red-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
                         <Trash2 className="h-4 w-4" />
                         Delete
                       </button>

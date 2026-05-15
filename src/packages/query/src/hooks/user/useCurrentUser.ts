@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "../apiClient";
-import { queryKeys } from "../queryKeys";
+import { apiClient } from "../../apiClient";
+import { queryKeys } from "../../queryKeys";
+
 
 export type CurrentUser = {
   id: string;

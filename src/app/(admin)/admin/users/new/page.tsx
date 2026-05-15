@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Mail, LockKeyhole, User, ShieldCheck } from "lucide-react";
-import { useRegister } from "@/packages/query/src/hooks/useRegister";
+import { useRegister } from "@/packages/query/src/hooks/auth/useRegister";
 import { AdminOnly } from "../../components/AdminOnly";
 
 export default function AddUserPage() {

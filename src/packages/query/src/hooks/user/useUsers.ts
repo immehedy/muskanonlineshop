@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "../apiClient";
+import { apiClient } from "../../apiClient";
 
 export type UserItem = {
   id: string;

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Loader2, ShieldAlert } from "lucide-react";
-import { useCurrentUser } from "@/packages/query/src/hooks/useCurrentUser";
+import { useCurrentUser } from "@/packages/query/src/hooks/user/useCurrentUser";
 
 export function AdminOnly({ children }: { children: React.ReactNode }) {
   const router = useRouter();

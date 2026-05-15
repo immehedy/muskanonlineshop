@@ -11,7 +11,7 @@ import {
   Home,
   User,
 } from "lucide-react";
-import { useCurrentUser } from "@/packages/query/src/hooks/useCurrentUser";
+import { useCurrentUser } from "@/packages/query/src/hooks/user/useCurrentUser";
 
 const navigation = [
   {

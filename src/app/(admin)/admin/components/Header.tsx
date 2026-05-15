@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Loader2,
 } from "lucide-react";
-import { useLogout } from "@/packages/query/src/hooks/useLogout";
+import { useLogout } from "@/packages/query/src/hooks/auth/useLogout";
 
 function titleFromPath(pathname: string) {
   if (pathname.startsWith("/admin/orders")) return "অর্ডার";
