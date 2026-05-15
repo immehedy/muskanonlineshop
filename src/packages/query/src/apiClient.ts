@@ -21,8 +21,4 @@ export async function apiClient<T>(
   }
 
   return res.json();
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> a176a94d047eedb53f656f7101dd511270316eeb
