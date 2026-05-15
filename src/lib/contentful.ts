@@ -83,3 +83,23 @@ export async function getRelatedProducts(
 
   return response.items;
 }
+
+// Fetch recently added products
+
+export async function getRecentProducts(
+  currentProductId: string,
+  limit = 4,
+  preview = false
+) {
+  const client = getClient(preview);
+
+  const response = await client.getEntries({
+    content_type: 'product',
+    'sys.id[ne]': currentProductId,
+    limit,
+    include: 2,
+    order: ['-sys.createdAt'],
+  });
+
+  return response.items;
+}
