@@ -1,7 +1,5 @@
-// packages/query/src/apiClient.ts
-
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 type RequestOptions = RequestInit;
 
@@ -23,4 +21,8 @@ export async function apiClient<T>(
   }
 
   return res.json();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a176a94d047eedb53f656f7101dd511270316eeb
