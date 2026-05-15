@@ -1,5 +1,4 @@
-
-import { createClient } from 'contentful';
+import { createClient } from "contentful";
 
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
@@ -9,56 +8,57 @@ const client = createClient({
 const previewClient = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN!,
-  host: 'preview.contentful.com',
+  host: "preview.contentful.com",
 });
 
-export const getClient = (preview: boolean = false) => 
+export const getClient = (preview: boolean = false) =>
   preview ? previewClient : client;
 
 // Fetch hero content
 export async function getHero(preview = false) {
   const client = getClient(preview);
-  
-  const response = await client.getEntry('6a5KvaN9Aji8TSJ8Fzknzn')
-  
+
+  const response = await client.getEntry("6a5KvaN9Aji8TSJ8Fzknzn");
+
   return response;
 }
 
 // Fetch all products with pagination support
-export async function getProducts(limit = 10, skip = 0, preview = false) {
+export async function getProducts(limit = 8, skip = 0, preview = false) {
   const client = getClient(preview);
-  
+
   const response = await client.getEntries({
-    content_type: 'product',
+    content_type: "product",
     limit,
     skip,
     include: 2,
+    order: ["-sys.createdAt"],
   });
-  
+
   return response;
 }
 
 // Fetch a single product by slug
 export async function getProductBySlug(slug: string, preview = false) {
   const client = getClient(preview);
-  
+
   const response = await client.getEntries({
-    content_type: 'product',
-    'fields.slug': slug,
+    content_type: "product",
+    "fields.slug": slug,
     include: 2,
   });
-  
+
   return response.items[0] || null;
 }
 
 // Fetch all product categories
 export async function getCategories(preview = false) {
   const client = getClient(preview);
-  
+
   const response = await client.getEntries({
-    content_type: 'category',
+    content_type: "category",
   });
-  
+
   return response.items;
 }
 
@@ -70,16 +70,16 @@ export async function getRelatedProducts(
   preview = false
 ) {
   const client = getClient(preview);
-  
+
   // Query products that share at least one category with the current product
   // but exclude the current product itself
   const response = await client.getEntries({
-    content_type: 'product',
-    'fields.categories.sys.id[in]': categoryIds.join(','),
-    'sys.id[ne]': currentProductId,
+    content_type: "product",
+    "fields.categories.sys.id[in]": categoryIds.join(","),
+    "sys.id[ne]": currentProductId,
     limit,
     include: 2,
   });
-  
+
   return response.items;
 }

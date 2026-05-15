@@ -44,11 +44,11 @@ const Hero = ({hero} : any) => {
               </div>
             </div>
             
-            <div className="pt-2">
+            {/* <div className="pt-2">
               <p className="text-sm text-muted-foreground mt-2">
                 Trusted by over <span className="font-medium text-foreground">2,000+</span> satisfied customers nationwide
               </p>
-            </div>
+            </div> */}
           </div>
           
           {/* Hero Image */}
