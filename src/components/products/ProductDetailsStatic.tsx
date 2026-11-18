@@ -1,7 +1,7 @@
 import { Product } from "@/types/contentful";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { RotateCcw, Truck } from "lucide-react";
 import AddToCartButton from "./AddToCartButton";
+import RichTextDescription from "./RichTextDescription";
 
 export function ProductDetailsStatic({ product }: { product: any }) {
   const { fields } = product as unknown as Product;
@@ -150,7 +150,7 @@ export function ProductDetailsStatic({ product }: { product: any }) {
         </h3>
 
         <div className="prose prose-sm max-w-none text-gray-700 sm:prose">
-          {documentToReactComponents(fields.description)}
+          <RichTextDescription richText={fields.description} />
         </div>
       </div>
 
